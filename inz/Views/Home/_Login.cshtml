@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using inz.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "_Login";
+}
+
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="mt-5">
+        <ul class="w-50 mx-auto">
+            <li class="btnDiv"><a asp-area="" asp-controller="Account" asp-action="Login" class="textColor btn">Zaloguj się</a></li>
+            <li class="btnDiv"><a asp-area="" asp-controller="Account" asp-action="Register" class="textColor btn">Zarejestruj się już teraz</a></li>
+        </ul>
+    </div>
+}
+else
+{
+    <div class="input-group w-25 m-5">
+        <input type="text" class="form-control input-lg border-danger searchBorder" placeholder="Wyszukaj utworu" />
+        <span class="input-group-btn">
+            <button class="btn btn-danger" type="button">
+                <i class="fas fa-search"></i>
+            </button>
+        </span>
+    </div>
+
+}
+

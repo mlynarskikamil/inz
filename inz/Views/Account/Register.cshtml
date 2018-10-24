@@ -1,0 +1,34 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Zarejestruj się";
+}
+
+
+<div class="panelDiv textColor">
+    <h2>@ViewData["Title"]</h2>
+
+            <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="w-50 mx-auto">
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Hasło</label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">Potwierdź hasło</label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-danger">Zarejestruj się</button>
+            </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
