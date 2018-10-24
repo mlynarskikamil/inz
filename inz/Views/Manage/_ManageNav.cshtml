@@ -1,0 +1,10 @@
+﻿@using inz.Views.Manage
+@inject SignInManager<ApplicationUser> SignInManager
+
+
+<div class="panelDiv">
+    <ul class="nav nav-pills nav-stacked">
+        <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext) mx-auto"><a asp-action="ChangePassword"><h5>Zmień hasło</h5></a></li>
+    </ul>
+</div>
+

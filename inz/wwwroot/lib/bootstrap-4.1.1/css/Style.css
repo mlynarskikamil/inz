@@ -1,0 +1,12 @@
+body {
+    padding:0px;
+}
+
+/*.navbar {
+    border-radius: 20px !important;
+}*/
+
+.navbarText {
+    color: white;
+    padding: 20px;
+}

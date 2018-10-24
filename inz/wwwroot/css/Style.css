@@ -1,0 +1,148 @@
+body {
+    padding: 0px;
+    background-image: url(../images/bg.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
+}
+
+.nav-item {
+    padding: 5px;
+}
+
+.nav-item:hover {
+    color: red;
+}
+
+.navbar {
+    border: solid 6px #911511;
+    border-radius: 20px !important;
+    padding: 0px;
+    background-color: #0e0e0e;
+}
+
+.textColor {
+    color: white;
+}
+
+.textColor:hover {
+    color: white;
+}
+
+.navbar-nav > li:hover {
+    background-color: #ff4444;
+    text-decoration: none !important;
+    color: white;
+    border-radius: 12px;
+}
+
+.leftBar {
+    border-color: #ff4444;
+    color: white;
+}
+
+.container {
+    border-radius: 20px !important;
+}
+
+.carousel {
+    border-radius: 55px 55px 55px 55px;
+    overflow: hidden;
+    border: solid 6px #911511;
+    margin: 0px 0px 10px 0px;
+}
+
+.nav-pills > li > a {
+    background: #440200;
+    color: white;
+}
+
+.icon {
+    color: #911511;
+}
+
+.contactDiv {
+    text-align: center;
+    border-radius: 10px;
+    border: solid 6px #911511;
+    margin: 15px 5px 15px 15px;
+    padding: 20px;
+    background-color: #0e0e0e;
+    width:30%;
+}
+
+.panelDiv {
+    text-align: center;
+    border-radius: 10px;
+    border: solid 6px #911511;
+    margin: 15px;
+    padding: 20px;
+    background-color: #0e0e0e;
+}
+
+.searchBorder {
+    border-width:3px;
+}
+
+.searchBorder:focus {
+    box-shadow: none;
+}
+
+.btnDiv {
+    text-align: center;
+    border-radius: 30px;
+    border: solid 7px #911511;
+    margin: 15px;
+    background-color: #0e0e0e;
+    padding: 8px;
+    text-decoration: none;
+    list-style: none;
+}
+
+.btnDiv:hover {
+    background-color: #ff4444;
+    text-decoration: none !important;
+    color: white;
+}
+
+@media screen and (max-width:1280px) {
+    .carousel {
+        width:100%;
+    }
+}
+@media screen and (max-width: 720px) {
+    h5 {
+        font-size: 2.8vw;
+    }
+    h4 {
+        font-size: 3.4vw;
+    }
+    h3{
+        font-size: 4vw;
+    }
+    br {
+        display: block;
+        margin: 5px;
+        line-height: 2px;
+        content: " ";
+    }
+    .tableRecord {
+        font-size: 2.2vw;
+    }
+}
+
+@media screen and (max-width:360px) {
+    h5 {
+        font-size: 2vw;
+    }
+    h3 {
+        font-size: 2.5vw;
+    }
+}
+
+.btn {
+    height:100%;
+    width:100%;
+}
