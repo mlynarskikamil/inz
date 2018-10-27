@@ -22,15 +22,18 @@ namespace inz.Controllers
         // GET: Songs
         public async Task<IActionResult> Index(string search)
         {
-            var songs = from s in _context.Songs
-                         select s;
+            var result = from a in _context.Songs
+                         select a;
+
+            ViewBag.ShowList = false;
 
             if (!String.IsNullOrEmpty(search))
             {
-                songs = songs.Where(m => m.Title.Contains(search));
+                result = result.Where(i => i.Artist.Contains(search)
+                || i.Title.Contains(search));
+                ViewBag.ShowList = true;
             }
-
-            return View(await songs.ToListAsync());
+            return View(await result.ToListAsync());
         }
 
         [HttpPost]

@@ -1,49 +1,58 @@
 ﻿@model IEnumerable<inz.Models.Songs>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Szukaj";
 }
 
-<h2>Index</h2>
+<div class="panelDiv textColor">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<form asp-controller="Songs" asp-action="Index" method="get">
     <p>
-        Tytuł: <input type="text" name="search">
-        <input type="submit" value="Filter" />
+        <a asp-action="Create">Create New</a>
     </p>
-</form>
 
-<table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Artist)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Artist)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <form asp-controller="Songs" asp-action="Index" method="get">
+        <div class="input-group w-50 m-3 mx-auto">
+            <input type="text" class="form-control input-lg border-danger searchBorder" placeholder="Wyszukaj utwór lub artyste" name="search" />
+            <span class="input-group-btn">
+                <button class="btn btn-danger" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </span>
+        </div>
+    </form>
+
+    @if (ViewBag.ShowList)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Artysta
+                    </th>
+                    <th>
+                        Tytuł
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Artist)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ID">Edytuj</a> |
+                            <a asp-action="Details" asp-route-id="@item.ID">Detale</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ID">Usuń</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    </div>
