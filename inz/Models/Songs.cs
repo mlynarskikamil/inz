@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace inz.Models.Search
+namespace inz.Models
 {
-    public class SearchViewModel
+    public class Songs
     {
+        public int ID { get; set; }
         public string Artist { get; set; }
         public string Title { get; set; }
+
+        internal static Task<string> ToListAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
