@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using inz.Data;
 using inz.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace inz.Controllers
 {
+    [Authorize]
+    [Route("[controller]/[action]")]
     public class SongsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,18 +23,35 @@ namespace inz.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index(string search)
+        public async Task<IActionResult> Index(string search, string all)
         {
             var result = from a in _context.Songs
                          select a;
 
             ViewBag.ShowList = false;
 
-            if (!String.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(all))
             {
-                result = result.Where(i => i.Artist.Contains(search)
-                || i.Title.Contains(search));
                 ViewBag.ShowList = true;
+            }
+            else
+            { 
+                if (!String.IsNullOrEmpty(search))
+                {
+                    result = result.Where(i => i.Artist == search
+                    || i.Title == search
+                    || i.Album == search);
+
+                    if (!result.Any())
+                    {
+                        ViewBag.ShowList = false;
+                    }
+                    else
+                    {
+                        ViewBag.ShowList = true;
+                    }
+
+                }
             }
             return View(await result.ToListAsync());
         }
@@ -71,7 +91,7 @@ namespace inz.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Artist,Title")] Songs songs)
+        public async Task<IActionResult> Create([Bind("ID,Artist,Title,Album")] Songs songs)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +123,7 @@ namespace inz.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Artist,Title")] Songs songs)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Artist,Title,Album")] Songs songs)
         {
             if (id != songs.ID)
             {

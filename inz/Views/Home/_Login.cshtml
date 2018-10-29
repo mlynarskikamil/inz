@@ -21,25 +21,27 @@
 }
 else
 {
-    @*<div class="input-group w-25 m-5">
-            <input type="text" class="form-control input-lg border-danger searchBorder" placeholder="Wyszukaj utworu" />
-            <span class="input-group-btn">
-                <button class="btn btn-danger" type="button">
-                    <i class="fas fa-search"></i>
-                </button>
-            </span>
-        </div>*@
-
     <form asp-controller="Songs" asp-action="Index" method="get">
-        <div class="input-group w-50 m-3 mx-auto">
+        <div class="input-group w-50 m-4 mx-auto">
             <input type="text" class="form-control input-lg border-danger searchBorder" placeholder="Wyszukaj utwór lub artyste" name="search" />
             <span class="input-group-btn">
                 <button class="btn btn-danger" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
             </span>
+            <div class="dropdown w-0">
+                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+
+                <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
+                    <input type="submit" name="all" value="Wyświetl wszystko" class="btn btn-danger" />
+                </div>
+            </div>
         </div>
     </form>
+
+    <div class="text-center">
+        <a asp-action="../Songs/Create" class="textColor btnDiv">Dodaj nowy utwór <i class="fas fa-plus-circle fa-lg"></i></a>
+    </div>
 
 }
 
