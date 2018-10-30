@@ -30,53 +30,59 @@
 
     @if (ViewBag.ShowList)
     {
-    <div class="table-responsive">
-        <table class="table">
-            <thead class="bg-danger table-borderless">
-                <tr>
-                    <th>
-                        Artysta
-                    </th>
-                    <th>
-                        Tytuł
-                    </th>
-                    <th>
-                        Album
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div class="table-responsive">
+            <table class="table tableSong">
+                <thead class="bg-danger table-borderless">
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Artist)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @if (item.Album != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Album)
-                            }
-                            else
-                            {
-                                <p>Brak informacji</p>
-                            }
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.ID">Edytuj</a> |
-                            <a asp-action="Details" asp-route-id="@item.ID">Detale</a> |
-                            <a asp-action="Delete" asp-route-id="@item.ID">Usuń</a>
-                        </td>
+                        <th>
+                            Artysta
+                        </th>
+                        <th>
+                            Tytuł
+                        </th>
+                        <th>
+                            Album
+                        </th>
+                        <th></th>
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Artist)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @if (item.Album != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Album)
+                                }
+                                else
+                                {
+                                    <p>Brak informacji</p>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.ID">Edytuj</a> |
 
-            </tbody>
-        </table>
-    </div>
+                                <a asp-action="Details" asp-route-id="@item.ID">Detale</a>
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span>|</span><a asp-action="Delete" asp-route-id="@item.ID">Usuń</a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
     }
     else
     {

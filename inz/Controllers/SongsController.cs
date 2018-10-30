@@ -153,6 +153,7 @@ namespace inz.Controllers
             return View(songs);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Songs/Delete/5
         public async Task<IActionResult> Delete(int id)
         {

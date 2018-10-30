@@ -33,8 +33,10 @@
         </form>
     </div>
 
-    <div class="mt-5">
-        <a asp-action="Index" class="textColor btnDiv">Wróć do listy </a>
+    <div class="">
+        <form asp-controller="Songs" asp-action="Index" name="all" class="w-25 mx-auto" method="get">
+            <input type="submit" name="all" value="Wróć do listy" class="btn btnDiv textColor" style="margin:0px;"/>
+        </form>
     </div>
 </div>
 
