@@ -16,5 +16,12 @@ namespace inz.Models
         {
             throw new NotImplementedException();
         }
+        //public int ID_Song { get; set; }
+        //public int ID_MP3 { get; set; }
+        //public int ID_Artist { get; set; }
+        //public int ID_Album { get; set; }
+        //public int ID_Producent { get; set; }
+        //public int ID_Text_Song { get; set; }
+        //public DateTime Relase_Date_Song { get; set; }
     }
 }

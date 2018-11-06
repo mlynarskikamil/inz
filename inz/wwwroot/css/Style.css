@@ -116,6 +116,7 @@ body {
         width: 100%;
     }
 }
+
 @media screen and (max-width: 720px) {
     h5 {
         font-size: 2.8vw;
@@ -135,10 +136,6 @@ body {
     .tableSong {
         font-size: 2.2vw;
     }
-    .input-group
-    {
-        width: 75% !important;
-    }
     ::-webkit-input-placeholder {
         font-size: 12px !important;
     }
@@ -152,6 +149,13 @@ body {
     }
     .send{
         width:100% !important;
+        margin:0px;
+    }
+    .w-25 {
+        width: 100% !important;
+    }
+    .w-50 {
+        width: 75% !important;
     }
 }
 

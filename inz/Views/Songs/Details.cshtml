@@ -6,34 +6,33 @@
 
 
 <div class="panelDiv textColor">
+    <div class="row">
+        <div class="col-4">
+            <h5>Artysta:</h5> <h3>@Html.DisplayFor(model => model.Artist)</h3>
+        </div>
+        <div class="col-4">
+            <h5>Tytuł:</h5> <h3>@Html.DisplayFor(model => model.Title)</h3>
+        </div>
+        <div class="col-4 mb-4">
+            <h5>Album:</h5> <h3>@Html.DisplayFor(model => model.Album)</h3>
+        </div>
+        <div class="col-6">
+            <h5>Produkcja podkładu:</h5>
+        </div>
+        <div class="col-6 mb-4">
+            <h5>Gościnnie:</h5>
+        </div>
+    </div>
+    <hr />
     <div>
-        <h4>Utwór</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                Artysta
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Artist)
-            </dd>
-            <dt>
-                Tytuł
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Title)
-            </dd>
-            <dt>
-                Album
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Album)
-            </dd>
-        </dl>
+        Tekst utworu
     </div>
     <div class="row justify-content-center">
         <form asp-controller="Songs" asp-action="Index" name="all" class="w-25 ml-2" method="get">
             <input type="submit" name="all" value="Wróć do listy" class="btn btnDiv textColor mx-auto col-8" style="height:65%;" />
         </form>
-        <a asp-action="Edit" asp-route-id="@Model.ID" class="textColor btnDiv mr-5 col-2">Edytuj</a>
+        <a asp-action="Edit" asp-route-id="@Model.ID" class="mr-3 col-3">
+            <input type="submit" name="all" value="Edytuj" class="btn btnDiv textColor mx-auto col-8" style="height:65%;" />
+        </a>
     </div>
 </div>
