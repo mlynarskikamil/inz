@@ -1,0 +1,38 @@
+﻿@model inz.Models.Song
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="panelDiv textColor">
+    <h3>Czy jesteś pewny że chcesz usunąć ten utwór?</h3>
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                Tytuł
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt>
+                Album
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Album.Name_Album)
+            </dd>
+            <dt>
+                Artysta
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Artist.Name_Artist)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" class="w-25 mx-auto">
+            <input type="hidden" asp-for="ID_Song" />
+            <input type="submit" value="Usuń utwór" class="btn btn-danger mb-5" />
+            <a asp-action="Index" class="textColor btnDiv mb-5">Wróć do listy</a>
+        </form>
+    </div>
+</div>

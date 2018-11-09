@@ -11,9 +11,10 @@ using System;
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181108134741_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,9 +101,9 @@ namespace inz.Data.Migrations
                     b.Property<int>("ID_Song")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ID_Album");
+                    b.Property<int>("ID_Album");
 
-                    b.Property<int?>("ID_Artist");
+                    b.Property<int>("ID_Artist");
 
                     b.Property<string>("Title");
 
@@ -227,11 +228,13 @@ namespace inz.Data.Migrations
                 {
                     b.HasOne("inz.Models.Album", "Album")
                         .WithMany("Songs")
-                        .HasForeignKey("ID_Album");
+                        .HasForeignKey("ID_Album")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("inz.Models.Artist", "Artist")
                         .WithMany("Songs")
-                        .HasForeignKey("ID_Artist");
+                        .HasForeignKey("ID_Artist")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

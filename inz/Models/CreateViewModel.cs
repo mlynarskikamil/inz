@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace inz.Models.Search
+namespace inz.Models
 {
-    public class SearchViewModel
+    public class CreateViewModel
     {
-        public string Artist { get; set; }
         public string Title { get; set; }
+        public string Name_Artist { get; set; }
+        public string Name_Album { get; set; }
     }
 }

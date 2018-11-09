@@ -1,0 +1,38 @@
+﻿@model inz.Models.Song
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<div class="panelDiv textColor">
+    <div class="row">
+        <div class="col-4">
+            <h5>Tytuł:</h5> <h3>@Html.DisplayFor(model => model.Title)</h3>
+        </div>
+        <div class="col-4">
+            <h5>Album:</h5> <h3> @Html.DisplayFor(model => model.Album.Name_Album)</h3>
+        </div>
+        <div class="col-4 mb-4">
+            <h5>Artysta:</h5> <h3>@Html.DisplayFor(model => model.Artist.Name_Artist)</h3>
+        </div>
+        <div class="col-6">
+            <h5>Produkcja podkładu:</h5>
+        </div>
+        <div class="col-6 mb-4">
+            <h5>Gościnnie:</h5>
+        </div>
+    </div>
+    <hr />
+<div>
+        Tekst utworu
+    </div>
+<div class="row justify-content-center">
+    <form asp-controller="Songs" asp-action="Index" name="all" class="w-25 ml-2" method="get">
+        <input type="submit" name="all" value="Wróć do listy" class="btn btnDiv textColor mx-auto col-8" style="height:65%;" />
+    </form>
+    <a asp-action="Edit" asp-route-id="@Model.ID_Song" class="mr-3 col-3">
+        <input type="submit" name="all" value="Edytuj" class="btn btnDiv textColor mx-auto col-8" style="height:65%;" />
+    </a>
+</div>
+</div>

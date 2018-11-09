@@ -1,0 +1,86 @@
+﻿@model IEnumerable<inz.Models.Song>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="panelDiv textColor">
+
+    <form asp-controller="Songs" asp-action="Index" method="get">
+        <div class="input-group w-50 m-4 mx-auto">
+            <input type="text" class="form-control input-lg border-danger searchBorder" placeholder="Wyszukaj utwór lub artyste" name="search" />
+            <span class="input-group-btn">
+                <button class="btn btn-danger" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </span>
+            <div class="dropdown w-0">
+                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+
+                <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
+                    <input type="submit" name="all" value="Wyświetl wszystko" class="btn btn-danger" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="text-center m-5">
+        <a asp-action=Create>
+            <butyon class="textColor btnDiv">
+                Dodaj nowy utwór <i class="fas fa-plus-circle fa-lg"></i>
+            </butyon>
+        </a>
+    </div>
+    @if (ViewBag.ShowList == true)
+    {
+        <div class="table-responsive">
+            <table class="table tableSong">
+                <thead class="bg-danger table-borderless">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Album)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Artist)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Album.Name_Album)
+                            </td>
+                            <td>
+                                @if (item.Album != null)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Artist.Name_Artist)
+                                }
+                                else
+                                {
+                                    <p>Brak informacji</p>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.ID_Song">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.ID_Song">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.ID_Song">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="mt-5"> Brak zawartości do wyświetlenia</p>
+    }
+</div>

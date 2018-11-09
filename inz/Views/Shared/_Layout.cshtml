@@ -19,14 +19,17 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark mt-5 w-75 center-block mx-auto">
-        <ul class="navbar-nav nav-fill w-100 btn-group">
-            <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="textColor btn"><i class="fas fa-home"></i> Strona główna</a></li>
-            <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Contact" class="textColor btn"><i class="fas fa-envelope"></i> Kontakt</a></li>
-            <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="About" class="textColor btn"><i class="fas fa-info"></i> O stronie</a></li>
-        </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark mt-5 w-75 center-block mx-auto">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav nav-fill w-100 btn-group">
+                <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="textColor btn"><i class="fas fa-home"></i> Strona główna</a></li>
+                <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Contact" class="textColor btn"><i class="fas fa-envelope"></i> Kontakt</a></li>
+                <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="About" class="textColor btn"><i class="fas fa-info"></i> O stronie</a></li>
+            </ul>
+            @await Html.PartialAsync("_LoginPartial")
         </div>
     </nav>
     <div class="container body-content">

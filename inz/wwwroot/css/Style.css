@@ -111,7 +111,12 @@ body {
     .carousel {
         width:100%;
     }
+
+    .tableSong {
+        width: 100%;
+    }
 }
+
 @media screen and (max-width: 720px) {
     h5 {
         font-size: 2.8vw;
@@ -128,8 +133,29 @@ body {
         line-height: 2px;
         content: " ";
     }
-    .tableRecord {
+    .tableSong {
         font-size: 2.2vw;
+    }
+    ::-webkit-input-placeholder {
+        font-size: 12px !important;
+    }
+
+    :-moz-placeholder { /* Firefox 18- */
+        font-size: 12px !important;
+    }
+
+    ::-moz-placeholder { /* Firefox 19+ */
+        font-size: 12px !important;
+    }
+    .send{
+        width:100% !important;
+        margin:0px;
+    }
+    .w-25 {
+        width: 100% !important;
+    }
+    .w-50 {
+        width: 75% !important;
     }
 }
 
@@ -139,6 +165,9 @@ body {
     }
     h3 {
         font-size: 2.5vw;
+    }
+    .tableSong {
+        font-size: 2vw;
     }
 }
 
