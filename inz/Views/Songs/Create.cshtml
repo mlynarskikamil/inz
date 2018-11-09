@@ -1,36 +1,32 @@
-﻿@model inz.Models.Songs
+﻿@model inz.Models.CreateViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-
 <div class="panelDiv textColor">
     <h2>Dodaj nowy utwór</h2>
-
     <hr />
     <div class="w-50 mx-auto">
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Artist" class="control-label">Artysta</label>
-                    <input asp-for="Artist" class="form-control" />
-                    <span asp-validation-for="Artist" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Title" class="control-label">Tytuł</label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Album" class="control-label"></label>
-                    <input asp-for="Album" class="form-control" />
-                    <span asp-validation-for="Album" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Dodaj utwór" class="btn btn-danger" />
-                </div>
-            </form>
+        <form asp-action="CreateVM">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name_Artist" class="control-label"></label>
+                <input asp-for="Name_Artist" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Name_Album" class="control-label"></label>
+                <input asp-for="Name_Album" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj utwór" class="btn btn-danger" />
+            </div>
+        </form>
     </div>
 
     <div class="m-5">
@@ -38,6 +34,6 @@
     </div>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

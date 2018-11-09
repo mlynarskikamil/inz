@@ -1,7 +1,7 @@
-﻿@model IEnumerable<inz.Models.Songs>
+﻿@model IEnumerable<inz.Models.Song>
 
 @{
-    ViewData["Title"] = "Search";
+    ViewData["Title"] = "Index";
 }
 
 <div class="panelDiv textColor">
@@ -23,29 +23,27 @@
             </div>
         </div>
     </form>
-
     <div class="text-center m-5">
-        <a asp-action=Create >
+        <a asp-action=Create>
             <butyon class="textColor btnDiv">
                 Dodaj nowy utwór <i class="fas fa-plus-circle fa-lg"></i>
             </butyon>
         </a>
     </div>
-
-    @if (ViewBag.ShowList)
+    @if (ViewBag.ShowList == true)
     {
         <div class="table-responsive">
             <table class="table tableSong">
                 <thead class="bg-danger table-borderless">
                     <tr>
                         <th>
-                            Artysta
+                            @Html.DisplayNameFor(model => model.Title)
                         </th>
                         <th>
-                            Tytuł
+                            @Html.DisplayNameFor(model => model.Album)
                         </th>
                         <th>
-                            Album
+                            @Html.DisplayNameFor(model => model.Artist)
                         </th>
                         <th></th>
                     </tr>
@@ -55,15 +53,15 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Artist)
+                                @Html.DisplayFor(modelItem => item.Title)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Title)
+                                @Html.DisplayFor(modelItem => item.Album.Name_Album)
                             </td>
                             <td>
                                 @if (item.Album != null)
                                 {
-                                    @Html.DisplayFor(modelItem => item.Album)
+                                    @Html.DisplayFor(modelItem => item.Artist.Name_Artist)
                                 }
                                 else
                                 {
@@ -71,19 +69,12 @@
                                 }
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.ID">Edytuj</a> |
-
-                                <a asp-action="Details" asp-route-id="@item.ID">Detale</a>
-
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <span>|</span><a asp-action="Delete" asp-route-id="@item.ID">Usuń</a>
-                                }
-
+                                <a asp-action="Edit" asp-route-id="@item.ID_Song">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.ID_Song">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.ID_Song">Delete</a>
                             </td>
                         </tr>
                     }
-
                 </tbody>
             </table>
         </div>

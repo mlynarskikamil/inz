@@ -1,4 +1,4 @@
-﻿@model inz.Models.Songs
+﻿@model inz.Models.Song
 
 @{
     ViewData["Title"] = "Delete";
@@ -10,12 +10,6 @@
         <hr />
         <dl class="dl-horizontal">
             <dt>
-                Artysta
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Artist)
-            </dd>
-            <dt>
                 Tytuł
             </dt>
             <dd>
@@ -25,13 +19,19 @@
                 Album
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Album)
+                @Html.DisplayFor(model => model.Album.Name_Album)
+            </dd>
+            <dt>
+                Artysta
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Artist.Name_Artist)
             </dd>
         </dl>
 
         <form asp-action="Delete" class="w-25 mx-auto">
-            <input type="hidden" asp-for="ID" />
-            <input type="submit" value="Usuń utwór" class="btn btn-danger mb-5" /> 
+            <input type="hidden" asp-for="ID_Song" />
+            <input type="submit" value="Usuń utwór" class="btn btn-danger mb-5" />
             <a asp-action="Index" class="textColor btnDiv mb-5">Wróć do listy</a>
         </form>
     </div>

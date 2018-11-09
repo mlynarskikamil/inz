@@ -23,6 +23,8 @@ namespace inz.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public DbSet<inz.Models.Songs> Songs { get; set; }
+        public DbSet<inz.Models.Song> Song { get; set; }
+        public DbSet<inz.Models.Artist> Artist { get; set; }
+        public DbSet<inz.Models.Album> Album { get; set; }
     }
 }

@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace inz.Models
 {
-    public class Artist
+    public class CreateViewModel
     {
-        public int ID_Artist { get; set; }
+        public string Title { get; set; }
         public string Name_Artist { get; set; }
+        public string Name_Album { get; set; }
     }
 }
