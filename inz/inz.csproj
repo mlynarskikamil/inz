@@ -5,6 +5,11 @@
     <UserSecretsId>aspnet-inz-C59D96C9-E630-4219-90A9-017CEA3290EF</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20181112150633_producer3.cs" />
+    <Compile Remove="Data\Migrations\20181112150633_producer3.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.Identity.Core.pl" Version="2.2.2" />

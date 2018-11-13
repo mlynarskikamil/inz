@@ -4,14 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181109232003_Init3")]
+    partial class Init3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,18 +96,6 @@ namespace inz.Data.Migrations
                     b.ToTable("Artist");
                 });
 
-            modelBuilder.Entity("inz.Models.Producer", b =>
-                {
-                    b.Property<int>("ID_Producer")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name_Producer");
-
-                    b.HasKey("ID_Producer");
-
-                    b.ToTable("Producer");
-                });
-
             modelBuilder.Entity("inz.Models.Song", b =>
                 {
                     b.Property<int>("ID_Song")
@@ -114,8 +105,6 @@ namespace inz.Data.Migrations
 
                     b.Property<int?>("ID_Artist");
 
-                    b.Property<int?>("ID_Producer");
-
                     b.Property<string>("Title");
 
                     b.HasKey("ID_Song");
@@ -123,8 +112,6 @@ namespace inz.Data.Migrations
                     b.HasIndex("ID_Album");
 
                     b.HasIndex("ID_Artist");
-
-                    b.HasIndex("ID_Producer");
 
                     b.ToTable("Song");
                 });
@@ -246,10 +233,6 @@ namespace inz.Data.Migrations
                     b.HasOne("inz.Models.Artist", "Artist")
                         .WithMany("Songs")
                         .HasForeignKey("ID_Artist");
-
-                    b.HasOne("inz.Models.Producer", "Producer")
-                        .WithMany("Songs")
-                        .HasForeignKey("ID_Producer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

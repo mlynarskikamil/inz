@@ -25,9 +25,9 @@
     </form>
     <div class="text-center m-5">
         <a asp-action=Create>
-            <butyon class="textColor btnDiv">
+            <buton class="textColor btnDiv">
                 Dodaj nowy utwór <i class="fas fa-plus-circle fa-lg"></i>
-            </butyon>
+            </buton>
         </a>
     </div>
     @if (ViewBag.ShowList == true)
@@ -56,12 +56,9 @@
                                 @Html.DisplayFor(modelItem => item.Title)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Album.Name_Album)
-                            </td>
-                            <td>
-                                @if (item.Album != null)
+                                @if (item.Album.Name_Album != null)
                                 {
-                                    @Html.DisplayFor(modelItem => item.Artist.Name_Artist)
+                                    <a asp-controller="Songs" asp-action="Album" asp-route-nameAlbum="@item.Album.Name_Album">@Html.DisplayFor(modelItem => item.Album.Name_Album)</a>
                                 }
                                 else
                                 {
@@ -69,14 +66,24 @@
                                 }
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.ID_Song">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ID_Song">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ID_Song">Delete</a>
+                                <a asp-controller="Songs" asp-action="Artist" asp-route-name="@item.Artist.Name_Artist">@Html.DisplayFor(modelItem => item.Artist.Name_Artist)</a>
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.ID_Song">Edytuj</a> |
+                                <a asp-action="Details" asp-route-id="@item.ID_Song">Detale</a> 
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span>|</span><a asp-action="Delete" asp-route-id="@item.ID_Song"> Usuń</a>
+                                }
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+
+
+
         </div>
     }
     else

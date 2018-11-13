@@ -21,6 +21,29 @@ namespace inz.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Artist(string name)
+        {
+            var applicationDbContext = _context.Song.Include(s => s.Album).Include(s => s.Artist);
+            var artist = from a in _context.Song
+                         select a;
+
+            artist = applicationDbContext
+                        .Where(i => i.Artist.Name_Artist == name);
+
+            return View(await artist.ToListAsync());
+        }
+
+        public async Task<IActionResult> Album(string nameAlbum)
+        {
+            var applicationDbContext = _context.Song.Include(s => s.Album).Include(s => s.Artist);
+            var album = from a in _context.Song
+                         select a;
+
+            album = applicationDbContext
+                        .Where(i => i.Album.Name_Album == nameAlbum);
+
+            return View(await album.ToListAsync());
+        }
 
         // GET: Songs
         public async Task<IActionResult> Index(string search, string all)
@@ -67,6 +90,7 @@ namespace inz.Controllers
             var song = await _context.Song
                 .Include(s => s.Album)
                 .Include(s => s.Artist)
+                .Include(s => s.Producer)
                 .SingleOrDefaultAsync(m => m.ID_Song == id);
             if (song == null)
             {
@@ -131,6 +155,17 @@ namespace inz.Controllers
                     _context.SaveChanges();
                 }
 
+                Producer producer = new Producer();
+                var resultProducer = _context.Producer
+                    .Where(i => i.Name_Producer == createViewModel.Name_Producer)
+                    .Count();
+                if (resultProducer < 1)
+                {
+                    producer.Name_Producer = createViewModel.Name_Producer;
+                    _context.Producer.Add(producer);
+                    _context.SaveChanges();
+                }
+
                 Song song = new Song();
                 song.Title = createViewModel.Title;
                 song.ID_Album = _context.Album
@@ -142,15 +177,16 @@ namespace inz.Controllers
                     .Where(c => c.Name_Artist.Equals(createViewModel.Name_Artist))
                     .Select(c => c.ID_Artist)
                     .First();
-                
-                song.ID_Album = _context.Album
-                    .Where(c => c.Name_Album.Equals(createViewModel.Name_Album))
-                    .Select(c => c.ID_Album)
-                    .First();
+
+                song.ID_Producer = _context.Producer
+                    .Where(c => c.Name_Producer.Equals(createViewModel.Name_Producer))
+                    .Select(c => c.ID_Producer)
+                    .FirstOrDefault();
+
                 _context.Song.Add(song);
                 _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new {all = "all" });
             }
             return View();
         }
@@ -163,13 +199,17 @@ namespace inz.Controllers
                 return NotFound();
             }
 
-            var song = await _context.Song.SingleOrDefaultAsync(m => m.ID_Song == id);
+            //var song = await _context.Song.SingleOrDefaultAsync(m => m.ID_Song == id);
+            var song = await _context.Song
+                .Include(s => s.Album)
+                .Include(s => s.Artist)
+                .Include(s => s.Producer)
+                .SingleOrDefaultAsync(m => m.ID_Song == id);
+
             if (song == null)
             {
                 return NotFound();
             }
-            ViewData["ID_Album"] = new SelectList(_context.Album, "ID_Album", "ID_Album", song.ID_Album);
-            ViewData["ID_Artist"] = new SelectList(_context.Artist, "ID_Artist", "ID_Artist", song.ID_Artist);
             return View(song);
         }
 
@@ -178,7 +218,7 @@ namespace inz.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID_Song,Title,ID_Artist,ID_Album")] Song song)
+        public async Task<IActionResult> Edit(int id, Song song)
         {
             if (id != song.ID_Song)
             {
@@ -205,10 +245,25 @@ namespace inz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ID_Album"] = new SelectList(_context.Album, "ID_Album", "ID_Album", song.ID_Album);
-            ViewData["ID_Artist"] = new SelectList(_context.Artist, "ID_Artist", "ID_Artist", song.ID_Artist);
             return View(song);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> EditVM(CreateViewModel createViewModel)
+        //{
+        //    if (createViewModel.Name_Album == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var song = await _context.Song.SingleOrDefaultAsync(m => m.ID_Song == id);
+        //    if (song == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(song);
+        //}
 
         [Authorize(Roles = "Admin")]
         // GET: Songs/Delete/5
@@ -222,6 +277,7 @@ namespace inz.Controllers
             var song = await _context.Song
                 .Include(s => s.Album)
                 .Include(s => s.Artist)
+                .Include(s => s.Producer)
                 .SingleOrDefaultAsync(m => m.ID_Song == id);
             if (song == null)
             {

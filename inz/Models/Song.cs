@@ -11,6 +11,8 @@ namespace inz.Models
     {
         [Key]
         public int ID_Song { get; set; }
+
+        [Display(Name = "Tytuł")]
         public string Title { get; set; }
 
         public int? ID_Artist { get; set; }
@@ -18,6 +20,9 @@ namespace inz.Models
 
         public int? ID_Album { get; set; }
         public virtual Album Album { get; set; }
+
+        public int? ID_Producer { get; set; }
+        public virtual Producer Producer { get; set; }
 
         internal static Task<string> ToListAsync()
         {
@@ -37,6 +42,8 @@ namespace inz.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID_Album { get; set; }
+
+        [Display(Name = "Album")]
         public string Name_Album { get; set; }
 
         public ICollection<Song> Songs { get; set; }
@@ -47,7 +54,21 @@ namespace inz.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID_Artist { get; set; }
+
+        [Display(Name = "Artysta")]
         public string Name_Artist { get; set; }
+
+        public ICollection<Song> Songs { get; set; }
+    }
+
+    public class Producer
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID_Producer { get; set; }
+
+        [Display(Name = "Producent")]
+        public string Name_Producer { get; set; }
 
         public ICollection<Song> Songs { get; set; }
     }

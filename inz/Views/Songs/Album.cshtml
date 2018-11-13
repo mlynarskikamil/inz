@@ -1,0 +1,66 @@
+﻿@model IEnumerable<inz.Models.Song>
+
+@{
+    ViewData["Title"] = "Album";
+}
+
+<div class="panelDiv textColor">
+    <h2 class="mb-4">Album: @Model.First().Album.Name_Album</h2>
+
+    <div class="table-responsive">
+        <table class="table tableSong">
+            <thead class="bg-danger table-borderless">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Album)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Artist)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @if (item.Album.Name_Album != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Album.Name_Album)
+                            }
+                            else
+                            {
+                                <p>Brak informacji</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Artist.Name_Artist)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ID_Song">Edytuj</a> |
+                            <a asp-action="Details" asp-route-id="@item.ID_Song">Detale</a>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <span>|</span><a asp-action="Delete" asp-route-id="@item.ID_Song"> Usuń</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="">
+        <form asp-controller="Songs" asp-action="Index" name="all" class="w-25 mx-auto" method="get">
+            <input type="submit" name="all" value="Wróć do listy" class="btn btnDiv textColor" style="margin:0px;" />
+        </form>
+    </div>
+</div>
+
