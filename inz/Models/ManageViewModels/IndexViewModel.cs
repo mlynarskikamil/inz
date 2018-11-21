@@ -13,7 +13,7 @@ namespace inz.Models.ManageViewModels
         public bool IsEmailConfirmed { get; set; }
 
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Proszę wpisać poprawny email")]
         public string Email { get; set; }
 
         [Phone]

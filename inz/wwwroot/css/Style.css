@@ -13,7 +13,7 @@ body {
 }
 
 .nav-item:hover {
-    color: red;
+    color: #d9534f;
 }
 
 .navbar {
@@ -21,6 +21,17 @@ body {
     border-radius: 20px !important;
     padding: 0px;
     background-color: #0e0e0e;
+}
+
+.link {
+    color: white;
+    text-decoration: none;
+}
+
+.link:hover {
+    color:#d9534f;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .textColor {
@@ -105,6 +116,45 @@ body {
     background-color: #ff4444;
     text-decoration: none !important;
     color: white;
+}
+
+.btnIndex {
+    text-align: center;
+    border-radius: 30px;
+    border: solid 4px #911511;
+    margin: 5px;
+    background-color: #0e0e0e;
+    padding: 4px;
+    text-decoration: none;
+    list-style: none;
+}
+
+.btnIndex:hover {
+    background-color: #ff4444;
+    text-decoration: none !important;
+    color: white;
+}
+
+.table th, .table td {
+    vertical-align: middle !important;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+.fa-thumbs-up:hover{
+    color:green;
+}
+
+.fa-thumbs-down:hover{
+    color:red;
 }
 
 @media screen and (max-width:1280px) {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,6 +24,9 @@ namespace inz.Models
 
         public int? ID_Producer { get; set; }
         public virtual Producer Producer { get; set; }
+
+        public int? ID_Mp3 { get; set; }
+        public virtual Mp3 Mp3 { get; set; }
 
         internal static Task<string> ToListAsync()
         {
@@ -71,5 +75,14 @@ namespace inz.Models
         public string Name_Producer { get; set; }
 
         public ICollection<Song> Songs { get; set; }
+    }
+
+    public class Mp3
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID_Mp3 { get; set; }
+
+        public byte[] Name_mp3 { get; set; }
     }
 }

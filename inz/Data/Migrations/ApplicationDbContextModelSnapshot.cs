@@ -93,6 +93,18 @@ namespace inz.Data.Migrations
                     b.ToTable("Artist");
                 });
 
+            modelBuilder.Entity("inz.Models.Mp3", b =>
+                {
+                    b.Property<int>("ID_Mp3")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<byte[]>("Name_mp3");
+
+                    b.HasKey("ID_Mp3");
+
+                    b.ToTable("Mp3");
+                });
+
             modelBuilder.Entity("inz.Models.Producer", b =>
                 {
                     b.Property<int>("ID_Producer")
@@ -114,6 +126,8 @@ namespace inz.Data.Migrations
 
                     b.Property<int?>("ID_Artist");
 
+                    b.Property<int?>("ID_Mp3");
+
                     b.Property<int?>("ID_Producer");
 
                     b.Property<string>("Title");
@@ -123,6 +137,8 @@ namespace inz.Data.Migrations
                     b.HasIndex("ID_Album");
 
                     b.HasIndex("ID_Artist");
+
+                    b.HasIndex("ID_Mp3");
 
                     b.HasIndex("ID_Producer");
 
@@ -246,6 +262,10 @@ namespace inz.Data.Migrations
                     b.HasOne("inz.Models.Artist", "Artist")
                         .WithMany("Songs")
                         .HasForeignKey("ID_Artist");
+
+                    b.HasOne("inz.Models.Mp3", "Mp3")
+                        .WithMany()
+                        .HasForeignKey("ID_Mp3");
 
                     b.HasOne("inz.Models.Producer", "Producer")
                         .WithMany("Songs")

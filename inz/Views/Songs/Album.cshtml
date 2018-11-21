@@ -6,19 +6,23 @@
 
 <div class="panelDiv textColor">
     <h2 class="mb-4">Album: @Model.First().Album.Name_Album</h2>
+    <span class="float-left mb-5">Informacje o albumie</span>
 
     <div class="table-responsive">
         <table class="table tableSong">
             <thead class="bg-danger table-borderless">
                 <tr>
                     <th>
+
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Title)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Album)
+                        @Html.DisplayNameFor(model => model.Album.Name_Album)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Artist)
+                        @Html.DisplayNameFor(model => model.Artist.Name_Artist)
                     </th>
                     <th></th>
                 </tr>
@@ -26,33 +30,39 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @if (item.Album.Name_Album != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Album.Name_Album)
-                            }
-                            else
-                            {
-                                <p>Brak informacji</p>
-                            }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Artist.Name_Artist)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.ID_Song">Edytuj</a> |
-                            <a asp-action="Details" asp-route-id="@item.ID_Song">Detale</a>
+                <tr>
+                    <td>
+                        <i class="fas fa-thumbs-up"></i>
+                        &nbsp;
+                        &nbsp;
+                        <i class="fas fa-thumbs-down"></i>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Album.Name_Album)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Artist.Name_Artist)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID_Song">
+                            <buton class="textColor btnIndex">Edytuj</buton>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.ID_Song">
+                            <buton class="textColor btnIndex">Detale</buton>
+                        </a>
 
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <span>|</span><a asp-action="Delete" asp-route-id="@item.ID_Song"> Usuń</a>
-                            }
-                        </td>
-                    </tr>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.ID_Song">
+                                <buton class="textColor btnIndex">Usuń</buton>
+                            </a>
+                        }
+
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

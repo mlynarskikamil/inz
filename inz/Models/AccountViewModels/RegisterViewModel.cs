@@ -9,7 +9,7 @@ namespace inz.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Proszę wpisać poprawny email")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 

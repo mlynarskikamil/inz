@@ -27,5 +27,6 @@ namespace inz.Data
         public DbSet<inz.Models.Artist> Artist { get; set; }
         public DbSet<inz.Models.Album> Album { get; set; }
         public DbSet<inz.Models.Producer> Producer { get; set; }
+        public DbSet<inz.Models.Mp3> Mp3 { get; set; }
     }
 }

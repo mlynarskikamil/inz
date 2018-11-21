@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,5 +24,7 @@ namespace inz.Models
 
         [Display(Name = "Producent")]
         public string Name_Producer { get; set; }
+
+        public IFormFile Name_mp3 { get; set; }
     }
 }

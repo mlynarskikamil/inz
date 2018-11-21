@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using inz.Data;
 using inz.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 namespace inz.Controllers
 {
@@ -166,6 +167,15 @@ namespace inz.Controllers
                     _context.SaveChanges();
                 }
 
+                Mp3 mp3 = new Mp3();
+                using (var memoryStream = new MemoryStream())
+                {
+                    await createViewModel.Name_mp3.CopyToAsync(memoryStream);
+                    mp3.Name_mp3 = memoryStream.ToArray();
+                }
+                _context.Mp3.Add(mp3);
+                _context.SaveChanges();
+
                 Song song = new Song();
                 song.Title = createViewModel.Title;
                 song.ID_Album = _context.Album
@@ -181,6 +191,11 @@ namespace inz.Controllers
                 song.ID_Producer = _context.Producer
                     .Where(c => c.Name_Producer.Equals(createViewModel.Name_Producer))
                     .Select(c => c.ID_Producer)
+                    .FirstOrDefault();
+
+                song.ID_Mp3 = _context.Mp3
+                    //.Where(c => c.Name_mp3.Equals(createViewModel.Name_mp3))
+                    .Select(c => c.ID_Mp3)
                     .FirstOrDefault();
 
                 _context.Song.Add(song);
@@ -295,7 +310,7 @@ namespace inz.Controllers
             var song = await _context.Song.SingleOrDefaultAsync(m => m.ID_Song == id);
             _context.Song.Remove(song);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", new { all = "all" });
         }
 
         private bool SongExists(int id)
