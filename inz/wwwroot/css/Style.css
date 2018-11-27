@@ -8,6 +8,20 @@ body {
     background-color: #464646;
 }
 
+#btnPlay {
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+.dropIndex:hover {
+    background-color: #d9534f;
+}
+
+.fa-play-circle, .fa-plus {
+    color: #911511;
+}
+
 .nav-item {
     padding: 5px;
 }
@@ -20,7 +34,7 @@ body {
     border: solid 6px #911511;
     border-radius: 20px !important;
     padding: 0px;
-    background-color: #0e0e0e;
+    background-color: #0e0e0e !important;
 }
 
 .link {
@@ -40,6 +54,11 @@ body {
 
 .textColor:hover {
     color: white;
+}
+
+.navbar-nav {
+    background-color: #0e0e0e !important;
+    border-radius: 12px;
 }
 
 .navbar-nav > li:hover {

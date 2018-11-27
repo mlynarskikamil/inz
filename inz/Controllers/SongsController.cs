@@ -9,6 +9,7 @@ using inz.Data;
 using inz.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace inz.Controllers
 {
@@ -38,7 +39,7 @@ namespace inz.Controllers
         {
             var applicationDbContext = _context.Song.Include(s => s.Album).Include(s => s.Artist);
             var album = from a in _context.Song
-                         select a;
+                        select a;
 
             album = applicationDbContext
                         .Where(i => i.Album.Name_Album == nameAlbum);
@@ -133,6 +134,15 @@ namespace inz.Controllers
         {
             if (ModelState.IsValid)
             {
+                string fileName = null;
+
+                if (createViewModel.Name_mp3 != null)
+                {
+                    fileName = createViewModel.Name_mp3.FileName;
+                    IFormFile file = createViewModel.Name_mp3;
+                    BlobsController blobsController = new BlobsController();
+                    blobsController.UploadBlob(fileName, file);
+                }
 
                 Artist artist = new Artist();
                 var resultArtist = _context.Artist
@@ -167,15 +177,6 @@ namespace inz.Controllers
                     _context.SaveChanges();
                 }
 
-                Mp3 mp3 = new Mp3();
-                using (var memoryStream = new MemoryStream())
-                {
-                    await createViewModel.Name_mp3.CopyToAsync(memoryStream);
-                    mp3.Name_mp3 = memoryStream.ToArray();
-                }
-                _context.Mp3.Add(mp3);
-                _context.SaveChanges();
-
                 Song song = new Song();
                 song.Title = createViewModel.Title;
                 song.ID_Album = _context.Album
@@ -193,19 +194,17 @@ namespace inz.Controllers
                     .Select(c => c.ID_Producer)
                     .FirstOrDefault();
 
-                song.ID_Mp3 = _context.Mp3
-                    //.Where(c => c.Name_mp3.Equals(createViewModel.Name_mp3))
-                    .Select(c => c.ID_Mp3)
-                    .FirstOrDefault();
+                song.UrlAzure = fileName;
 
                 _context.Song.Add(song);
                 _context.SaveChanges();
 
-                return RedirectToAction("Index", new {all = "all" });
+                return RedirectToAction("Index", new { all = "all" });
             }
             return View();
         }
 
+        [HttpGet]
         // GET: Songs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -214,18 +213,27 @@ namespace inz.Controllers
                 return NotFound();
             }
 
-            //var song = await _context.Song.SingleOrDefaultAsync(m => m.ID_Song == id);
             var song = await _context.Song
                 .Include(s => s.Album)
                 .Include(s => s.Artist)
                 .Include(s => s.Producer)
                 .SingleOrDefaultAsync(m => m.ID_Song == id);
 
+            var createViewModel = new CreateViewModel()
+            {
+                ID_Song = song.ID_Song,
+                Title = song.Title,
+                Name_Artist = song.Artist.Name_Artist,
+                Name_Album = song.Album.Name_Album,
+                Name_Producer = song.Producer.Name_Producer,
+                UrlAzure = song.UrlAzure
+            };
+
             if (song == null)
             {
                 return NotFound();
             }
-            return View(song);
+            return View(createViewModel);
         }
 
         // POST: Songs/Edit/5
@@ -233,52 +241,81 @@ namespace inz.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Song song)
+        public async Task<IActionResult> Edit(int id, CreateViewModel createViewModel)
         {
-            if (id != song.ID_Song)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                Song song = _context.Song.FirstOrDefault(s => s.ID_Song == id);
+
+                Artist artist = new Artist();
+                var resultArtist = _context.Artist
+                    .Where(i => i.Name_Artist == createViewModel.Name_Artist)
+                    .Count();
+                if (resultArtist < 1)
                 {
-                    _context.Update(song);
-                    await _context.SaveChangesAsync();
+                    artist.Name_Artist = createViewModel.Name_Artist;
+                    _context.Artist.Add(artist);
+                    _context.SaveChanges();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                Album album = new Album();
+                var resultAlbum = _context.Album
+                    .Where(i => i.Name_Album == createViewModel.Name_Album)
+                    .Count();
+                if (resultAlbum < 1)
                 {
-                    if (!SongExists(song.ID_Song))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    album.Name_Album = createViewModel.Name_Album;
+                    _context.Album.Add(album);
+                    _context.SaveChanges();
                 }
-                return RedirectToAction(nameof(Index));
+
+                Producer producer = new Producer();
+                var resultProducer = _context.Producer
+                    .Where(i => i.Name_Producer == createViewModel.Name_Producer)
+                    .Count();
+                if (resultProducer < 1)
+                {
+                    producer.Name_Producer = createViewModel.Name_Producer;
+                    _context.Producer.Add(producer);
+                    _context.SaveChanges();
+                }
+
+                string fileName = null;
+
+                if (createViewModel.Name_mp3 != null)
+                {
+                    fileName = createViewModel.Name_mp3.FileName;
+                    IFormFile file = createViewModel.Name_mp3;
+                    BlobsController blobsController = new BlobsController();
+                    blobsController.UploadBlob(fileName, file);
+                }
+
+                song.Title = createViewModel.Title;
+
+                song.ID_Album = _context.Album
+                    .Where(c => c.Name_Album.Equals(createViewModel.Name_Album))
+                    .Select(c => c.ID_Album)
+                    .First();
+
+                song.ID_Artist = _context.Artist
+                   .Where(c => c.Name_Artist.Equals(createViewModel.Name_Artist))
+                   .Select(c => c.ID_Artist)
+                   .First();
+
+                song.ID_Producer = _context.Producer
+                    .Where(c => c.Name_Producer.Equals(createViewModel.Name_Producer))
+                    .Select(c => c.ID_Producer)
+                    .FirstOrDefault();
+
+                song.UrlAzure = fileName;
+
+                _context.Song.Update(song);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index", new { all = "all" });
             }
-            return View(song);
+            return View(createViewModel);
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EditVM(CreateViewModel createViewModel)
-        //{
-        //    if (createViewModel.Name_Album == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var song = await _context.Song.SingleOrDefaultAsync(m => m.ID_Song == id);
-        //    if (song == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(song);
-        //}
 
         [Authorize(Roles = "Admin")]
         // GET: Songs/Delete/5

@@ -1,4 +1,4 @@
-﻿@model inz.Models.Song
+﻿@model inz.Models.CreateViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -8,21 +8,34 @@
     <h4>Edytuj utwór</h4>
     <hr />
     <div class="w-25 mx-auto">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Artist.Name_Artist" class="control-label"></label>
-                <input asp-for="Artist.Name_Artist" class="form-control" asp-items="@Html.DisplayFor(model => model.Artist.Name_Artist)" />
+                <label asp-for="Name_Artist" class="control-label"></label>
+                <input asp-for="Name_Artist" class="form-control" asp-items="@Html.DisplayFor(model => model.Name_Artist)" />
             </div>
             <div class="form-group">
-                <label asp-for="Album.Name_Album" class="control-label"></label>
-                <input asp-for="Album.Name_Album" class="form-control" asp-items="@Html.DisplayFor(model => model.Album.Name_Album)" />
-                @*@Html.EditorFor(model => model.Album.Name_Album)*@
+                <label asp-for="Name_Album" class="control-label"></label>
+                <input asp-for="Name_Album" class="form-control" asp-items="@Html.DisplayFor(model => model.Name_Album)" />
             </div>
+            <div class="form-group">
+                <label asp-for="Name_Producer" class="control-label"></label>
+                <input asp-for="Name_Producer" class="form-control" asp-items="@Html.DisplayFor(model => model.Name_Producer)" />
+            </div>
+
+            @if (Model.UrlAzure == null)
+            {
+                <div class="form-group">
+                    <label asp-for="Name_mp3" class="btn btn-danger btn-file mt-3">
+                        Dodaj plik dźwiękowy <input asp-for="Name_mp3" type="file" style="display: none;">
+                    </label>
+                </div>
+            }
+
             <div class="form-group">
                 <input type="submit" value="Zapisz" class="btn btn-danger" />
             </div>

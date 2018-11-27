@@ -9,6 +9,16 @@ namespace inz.Models
 {
     public class CreateViewModel
     {
+        public CreateViewModel()
+        {
+            this.ID_Song = ID_Song;
+            this.Title = Title;
+            this.Name_Artist = Name_Artist;
+            this.Name_Album = Name_Album;
+            this.Name_Producer = Name_Producer;
+            this.Name_mp3 = Name_mp3;
+            this.UrlAzure = UrlAzure;
+        }
         public int ID_Song { get; set; }
 
         [Required(ErrorMessage = "Proszę wpisać tytuł")]
@@ -26,5 +36,7 @@ namespace inz.Models
         public string Name_Producer { get; set; }
 
         public IFormFile Name_mp3 { get; set; }
+
+        public string UrlAzure { get; set; }
     }
 }

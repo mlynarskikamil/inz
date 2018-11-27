@@ -10,11 +10,23 @@ namespace inz.Models
 {
     public class Song
     {
+        public Song()
+        {
+            this.ID_Song = ID_Song;
+            this.Title = Title;
+            this.UrlAzure = UrlAzure;
+            this.ID_Artist = ID_Artist;
+            this.ID_Album = ID_Album;
+            this.ID_Producer = ID_Producer;
+        }
+
         [Key]
         public int ID_Song { get; set; }
 
         [Display(Name = "Tytuł")]
         public string Title { get; set; }
+
+        public string UrlAzure { get; set; }
 
         public int? ID_Artist { get; set; }
         public virtual Artist Artist { get; set; }
@@ -24,9 +36,6 @@ namespace inz.Models
 
         public int? ID_Producer { get; set; }
         public virtual Producer Producer { get; set; }
-
-        public int? ID_Mp3 { get; set; }
-        public virtual Mp3 Mp3 { get; set; }
 
         internal static Task<string> ToListAsync()
         {
@@ -75,14 +84,5 @@ namespace inz.Models
         public string Name_Producer { get; set; }
 
         public ICollection<Song> Songs { get; set; }
-    }
-
-    public class Mp3
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID_Mp3 { get; set; }
-
-        public byte[] Name_mp3 { get; set; }
     }
 }

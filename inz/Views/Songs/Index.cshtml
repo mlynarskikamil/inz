@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+    
 <div class="panelDiv textColor">
     <form asp-controller="Songs" asp-action="Index" method="get">
         <div class="input-group w-50 m-4 mx-auto">
@@ -35,9 +35,7 @@
             <table class="table tableSong">
                 <thead class="bg-danger table-borderless">
                     <tr>
-                        <th>
-
-                        </th>
+                        <th> </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Title)
                         </th>
@@ -47,6 +45,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Artist.Name_Artist)
                         </th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -77,28 +76,43 @@
                                 <a asp-controller="Songs" asp-action="Artist" asp-route-name="@item.Artist.Name_Artist" class="link">@Html.DisplayFor(modelItem => item.Artist.Name_Artist)</a>
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.ID_Song">
-                                    <buton class="textColor btnIndex">Edytuj</buton>
-                                </a>
-                                <a asp-action="Details" asp-route-id="@item.ID_Song">
-                                    <buton class="textColor btnIndex">Detale</buton>
-                                </a>
+                                <div class="dropdown w-0">
 
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-action="Delete" asp-route-id="@item.ID_Song">
-                                        <buton class="textColor btnIndex">Usuń</buton>
-                                    </a>
-                                }   
+                                    <button class="btn bg-danger textColor dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Więcej
+                                    </button>
+
+                                    <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
+
+                                        <a asp-action="Edit" asp-route-id="@item.ID_Song" class="dropdown-item dropIndex">
+                                            <buton class="btn btn-danger">Edytuj</buton>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.ID_Song" class="dropdown-item dropIndex">
+                                            <buton class="btn btn-danger">Detale</buton>
+                                        </a>
+
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@item.ID_Song" class="dropdown-item dropIndex">
+                                                <buton class="btn btn-danger">Usuń</buton>
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
                             </td>
                             <td>
-                                @{
-                                    var base64 = Convert.ToBase64String(item.Mp3.Name_mp3);
-                                    var imgSrc = String.Format("data:audio/mp3;base64,{0}", base64);
+                                @if (item.UrlAzure != null)
+                                {
+                                    <button onclick="change('https://pracainzynierska.blob.core.windows.net/mp3/' + '@item.UrlAzure')" id="btnPlay"><i class="fas fa-play-circle fa-2x"></i></button>
+                                    <script>
+                                        function change(song) {
+                                            var audio = document.getElementById("audioPlayer");
+                                            audio.src = song;
+                                            audio.load();
+                                            audio.play();
+                                        }
+                                    </script>
                                 }
-                                <audio controls>
-                                    <source src="@imgSrc" type="audio/ogg" />
-                                </audio>
                             </td>
                         </tr>
                     }

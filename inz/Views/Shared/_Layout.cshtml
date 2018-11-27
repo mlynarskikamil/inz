@@ -12,13 +12,20 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        @*<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />*@
+        <link rel="stylesheet" href="~/lib/bootstrap-4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap-4.1.1/bootstrap.min.js" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/Style.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     </environment>
 </head>
 <body>
+    @*<audio controls='controls' id="audioPlayer"></audio>*@
+
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark mt-5 w-75 center-block mx-auto">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -35,6 +42,33 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
+        <div id="content"></div>
+        <audio id="audioPlayer" controls='controls'></audio>
+        @*<audio preload="auto" loop="true" autobuffer controls="controls" src="https://pracainzynierska.blob.core.windows.net/mp3/01. Balmain (prod. LexNour).mp3"></audio>
+        <script>
+
+            $(document).ready(function () {
+                function SetCookie(Value) {
+                    $.cookie('TimeElapsed', Value, { path: '/' });
+                }
+                if ($.cookie('TimeElapsed') === null || $.cookie('TimeElapsed') === "" || $.cookie('TimeElapsed') === "null" || $.cookie('TimeElapsed') === undefined) {
+                    $("audio").get(0).play();
+                    UpdateTime();
+                } else {
+                    $("audio").get(0).play();
+                    $("audio").get(0).pause();
+                    $("audio").get(0).currentTime = $.cookie('TimeElapsed');
+                    $("audio").get(0).play();
+                    console.log('Start Time: ' + $("audio").get(0).currentTime);
+                    UpdateTime();
+                }
+                function UpdateTime() {
+                    $("audio").on("timeupdate", function (event) {
+                        SetCookie(this.currentTime);
+                    });
+                }
+            })
+        </script>*@
         <footer>
             <p class="text-center textColor">&copy; Praca inżynierska 2018 - Kamil Młynarski</p>
         </footer>
@@ -47,18 +81,21 @@
     </environment>
     <environment exclude="Development">
         @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>*@
-        @*<script src="~/js/site.min.js" asp-append-version="true"></script>*@
+                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery"
+                    crossorigin="anonymous"
+                    integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+            </script>
+            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                    crossorigin="anonymous"
+                    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+            </script>*@
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap-4.1.1/jquery-3.3.1.slim.min.js"></script>
+        <script src="~/lib/bootstrap-4.1.1/popper.min.js"></script>
+        <script src="~/lib/bootstrap-4.1.1/bootstrap.min.js"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)
