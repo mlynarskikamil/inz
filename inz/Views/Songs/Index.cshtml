@@ -84,17 +84,17 @@
 
                                     <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
 
-                                        <a asp-action="Edit" asp-route-id="@item.ID_Song" class="dropdown-item dropIndex">
-                                            <buton class="btn btn-danger">Edytuj</buton>
+                                        <a asp-action="Edit" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
+                                            <buton>Edytuj</buton>
                                         </a>
-                                        <a asp-action="Details" asp-route-id="@item.ID_Song" class="dropdown-item dropIndex">
-                                            <buton class="btn btn-danger">Detale</buton>
+                                        <a asp-action="Details" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
+                                            <buton>Detale</buton>
                                         </a>
 
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-action="Delete" asp-route-id="@item.ID_Song" class="dropdown-item dropIndex">
-                                                <buton class="btn btn-danger">Usuń</buton>
+                                            <a asp-action="Delete" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
+                                                <buton>Usuń</buton>
                                             </a>
                                         }
                                     </div>
@@ -103,24 +103,13 @@
                             <td>
                                 @if (item.UrlAzure != null)
                                 {
-                                    <button onclick="change('https://pracainzynierska.blob.core.windows.net/mp3/' + '@item.UrlAzure')" id="btnPlay"><i class="fas fa-play-circle fa-2x"></i></button>
-                                    <script>
-                                        function change(song) {
-                                            var audio = document.getElementById("audioPlayer");
-                                            audio.src = song;
-                                            audio.load();
-                                            audio.play();
-                                        }
-                                    </script>
+                                    <button onclick="change('https://pracainzynierska.blob.core.windows.net/mp3/' + '@item.UrlAzure', '@item.Title', '@item.Artist.Name_Artist')" id="btnPlay"><i class="fas fa-play-circle fa-2x"></i></button>
                                 }
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-
-
-
         </div>
     }
     else

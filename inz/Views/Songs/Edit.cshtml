@@ -27,7 +27,7 @@
                 <input asp-for="Name_Producer" class="form-control" asp-items="@Html.DisplayFor(model => model.Name_Producer)" />
             </div>
 
-            @if (Model.UrlAzure == null)
+            @if (Model.UrlAzure == null && User.IsInRole("Admin"))
             {
                 <div class="form-group">
                     <label asp-for="Name_mp3" class="btn btn-danger btn-file mt-3">

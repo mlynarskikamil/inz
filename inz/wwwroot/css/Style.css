@@ -8,6 +8,13 @@ body {
     background-color: #464646;
 }
 
+#audioPlayer {
+    float: right;
+    left: unset;
+    width:132px;
+    height:300px;
+}
+
 #btnPlay {
     border: none;
     padding: 0;
@@ -15,7 +22,7 @@ body {
 }
 
 .dropIndex:hover {
-    background-color: #d9534f;
+    background-color: #911511;
 }
 
 .fa-play-circle, .fa-plus {
@@ -82,6 +89,7 @@ body {
     overflow: hidden;
     border: solid 6px #911511;
     margin: 0px 0px 10px 0px;
+    width:1080px;
 }
 
 .nav-pills > li > a {
@@ -244,3 +252,64 @@ input[type="file"] {
     height:100%;
     width:100%;
 }
+
+.player {
+    float: right;
+    left: unset;
+    height:300px;
+    width: 133px;
+    padding: 20px;
+    margin: 10px auto;
+    box-shadow: 0px 1px 10px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #0e0e0e;
+    border: solid 6px #911511;
+    border-radius: 20px !important;
+}
+.album-cover {
+    box-shadow: 0px 1px 10px rgba(0,0,0,0.35);
+    display: block;
+    max-width: 100px;
+}
+
+.song-progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: red;
+    margin: 10px 0;
+}
+
+.inner-bar {
+    height: 3px;
+    background: #df405a;
+    width: 25%;
+}
+
+.song-info, .song-title {
+    margin-bottom: 0;
+    color:white;
+}
+
+.player-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    color: #911511;
+}
+
+.playerbtn {
+    font-size: 25px;
+    cursor: pointer;
+    transition: 0.15s ease-in-out;
+}
+			
+
+
+
+
+
+

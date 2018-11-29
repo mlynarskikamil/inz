@@ -42,5 +42,13 @@ namespace inz.Controllers
             }
             return "success!";
         }
+
+        public string DeleteBlob (string fileName)
+        {
+            CloudBlobContainer container = GetCloudBlobContainer();
+            CloudBlockBlob blob = container.GetBlockBlobReference(fileName);
+            blob.DeleteIfExistsAsync();
+            return "succes!";
+        }
     }
 }

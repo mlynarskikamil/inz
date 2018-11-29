@@ -347,6 +347,13 @@ namespace inz.Controllers
             var song = await _context.Song.SingleOrDefaultAsync(m => m.ID_Song == id);
             _context.Song.Remove(song);
             await _context.SaveChangesAsync();
+
+            if(song.UrlAzure != null)
+            {
+                BlobsController blobsController = new BlobsController();
+                blobsController.DeleteBlob(song.UrlAzure);
+            }
+
             return RedirectToAction("Index", new { all = "all" });
         }
 
