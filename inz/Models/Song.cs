@@ -59,6 +59,10 @@ namespace inz.Models
         [Display(Name = "Album")]
         public string Name_Album { get; set; }
 
+        public string ImgAlbumUrl { get; set; }
+
+        public string InfoAlbum { get; set; }
+
         public ICollection<Song> Songs { get; set; }
     }
 

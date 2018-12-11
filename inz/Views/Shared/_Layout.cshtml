@@ -24,34 +24,38 @@
     </environment>
 
     <script src="~/js/site.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+
 </head>
 <body>
-    @*<audio controls='controls' id="audioPlayer"></audio>*@
-
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark mt-5 w-75 center-block mx-auto">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav nav-fill w-100 btn-group">
-                <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="textColor btn"><i class="fas fa-home"></i> Strona główna</a></li>
-                <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Contact" class="textColor btn"><i class="fas fa-envelope"></i> Kontakt</a></li>
-                <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="About" class="textColor btn"><i class="fas fa-info"></i> O stronie</a></li>
+        <div class="collapse navbar-collapse menu" id="collapsibleNavbar">
+            <ul class="navbar-nav nav-fill w-100 btn-group menu">
+                <li class="nav-item"><button asp-area="" asp-controller="Home" asp-action="Index" class="textColor btn ajax"><i class="fas fa-home"></i> Strona główna</button></li>
+                <li class="nav-item"><button asp-area="" asp-controller="Home" asp-action="Contact" class="textColor btn ajax"><i class="fas fa-envelope"></i> Kontakt</button></li>
+                <li class="nav-item"><button asp-area="" asp-controller="Home" asp-action="About" class="textColor btn ajax"><i class="fas fa-info"></i> O stronie</button></li>
             </ul>
             @await Html.PartialAsync("_LoginPartial")
         </div>
     </nav>
     <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <div id="content"></div>
-        <div>
-            @*<audio id="audioPlayer" controls='controls' class="fixed-bottom"></audio>             !!!!!    *@ 
 
+        <div id="renderbody">
+            @RenderBody()
+        </div>
+
+        <div class="loader" style="margin: auto; display:none;"></div>
+
+        <hr />
+
+        <div>
             <div class='player fixed-bottom' style="display:none">
                 <audio id="audioPlayer" preload="metadata" ontimeupdate="udpateProgress()"></audio>
                 <div class='album-cover'>
-                    <img src='https://www.tunefind.com/i/album-art-empty.png' class="album-cover" />
+                    <img class="album-cover" id="albumCover" />
                 </div>
                 <progress class='song-progress-bar' id="seekbar" value="0" max="1"></progress>
                 <div class='song-info'>
@@ -60,19 +64,25 @@
                         <p class='song-band pt-1' id="artistTitle"></p>
                     </div>
                 </div>
+
                 <div class='player-buttons'>
+
                     <div class='playerbtn playToggle'>
                         <i class="fa fa-play" aria-hidden="true" onclick="playAudio('audioPlayer')" id="play"></i>
                         <i class="fas fa-pause" onclick="playAudio('audioPlayer')" id="pause"></i>
                     </div>
+
+                </div>
+
+                <br />
+
+                <div style="display:flex">
+                    <i class="fas fa-volume-off fa-xs mt-auto mb-auto"></i> &nbsp; <input type="range" class="custom-range" id="customRange" min="0" max="100" step="1" onchange="SetVolume(this.value)" /> &nbsp; <i class="fas fa-volume-up fa-xs mt-auto mb-auto"></i>
                 </div>
             </div>
 
-
-
-
             <script>
-                var mediaPlayer = document.getElementById("audioPlayer"); 
+                var mediaPlayer = document.getElementById("audioPlayer");
                 var progressbar = document.getElementById('seekbar');
 
                 progressbar.addEventListener("click", seek);
@@ -84,49 +94,18 @@
                 }
             </script>
 
-
-
-
-
-
-
-            @*<audio preload="auto" loop="true" autobuffer controls="controls" src="https://pracainzynierska.blob.core.windows.net/mp3/01. Balmain (prod. LexNour).mp3"></audio>
-        <script>
-
-            $(document).ready(function () {
-                function SetCookie(Value) {
-                    $.cookie('TimeElapsed', Value, { path: '/' });
-                }
-                if ($.cookie('TimeElapsed') === null || $.cookie('TimeElapsed') === "" || $.cookie('TimeElapsed') === "null" || $.cookie('TimeElapsed') === undefined) {
-                    $("audio").get(0).play();
-                    UpdateTime();
-                } else {
-                    $("audio").get(0).play();
-                    $("audio").get(0).pause();
-                    $("audio").get(0).currentTime = $.cookie('TimeElapsed');
-                    $("audio").get(0).play();
-                    console.log('Start Time: ' + $("audio").get(0).currentTime);
-                    UpdateTime();
-                }
-                function UpdateTime() {
-                    $("audio").on("timeupdate", function (event) {
-                        SetCookie(this.currentTime);
-                    });
-                }
-            })
-        </script>*@
             <footer>
                 <p class="text-center textColor">&copy; Praca inżynierska 2018 - Kamil Młynarski</p>
             </footer>
         </div>
 
-    <environment include="Development">
-        <script src="~/lib/bootstrap-4.1.1/jquery-3.3.1.slim.min.js"></script>
-        <script src="~/lib/bootstrap-4.1.1/popper.min.js"></script>
-        <script src="~/lib/bootstrap-4.1.1/bootstrap.min.js"></script>
-    </environment>
-    <environment exclude="Development">
-        @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+        <environment include="Development">
+            <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+            <script src="~/lib/bootstrap-4.1.1/popper.min.js"></script>
+            <script src="~/lib/bootstrap-4.1.1/bootstrap.min.js"></script>
+        </environment>
+        <environment exclude="Development">
+            @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                     asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                     asp-fallback-test="window.jQuery"
                     crossorigin="anonymous"
@@ -138,12 +117,12 @@
                     crossorigin="anonymous"
                     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
             </script>*@
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap-4.1.1/jquery-3.3.1.slim.min.js"></script>
-        <script src="~/lib/bootstrap-4.1.1/popper.min.js"></script>
-        <script src="~/lib/bootstrap-4.1.1/bootstrap.min.js"></script>
-    </environment>
+            <script src="~/js/site.min.js" asp-append-version="true"></script>
+            <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+            <script src="~/lib/bootstrap-4.1.1/popper.min.js"></script>
+            <script src="~/lib/bootstrap-4.1.1/bootstrap.min.js"></script>
+        </environment>
 
-    @RenderSection("Scripts", required: false)
+        @RenderSection("Scripts", required: false)
 </body>
 </html>

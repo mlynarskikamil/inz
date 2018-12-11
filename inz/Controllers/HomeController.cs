@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using inz.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace inz.Controllers
 {
@@ -12,21 +13,31 @@ namespace inz.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+                return PartialView();
+            else
+                return View();
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
-            return View();
+            if (isAjax)
+                return PartialView();
+            else
+                return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
-            return View();
+            if (isAjax)
+                return PartialView();
+            else
+                return View();
         }
 
         public IActionResult Error()

@@ -3,9 +3,9 @@
 @{
     ViewData["Title"] = "Index";
 }
-    
+
 <div class="panelDiv textColor">
-    <form asp-controller="Songs" asp-action="Index" method="get">
+    <form asp-controller="Songs" asp-action="Index" method="get" class="ajaxSearch">
         <div class="input-group w-50 m-4 mx-auto">
             <input type="text" class="form-control input-lg border-danger searchBorder" placeholder="Wyszukaj utwór lub artyste" name="search" />
             <span class="input-group-btn">
@@ -17,100 +17,30 @@
                 <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 
                 <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
-                    <input type="submit" name="all" value="Wyświetl wszystko" class="btn btn-danger" />
+                    <button class="btn btn-danger allSearch">
+                        Wyświetl wszystko
+
+                        <script>
+                            $('.allSearch').click(function () {
+                                $('.ajaxSearch').append('<input type="hidden" name="all" value="Wyświetl wszystko" class="btn btn-danger" />');
+                            })
+                        </script>
+
+                    </button>
                 </div>
             </div>
         </div>
     </form>
-    <div class="text-center m-5">
-        <a asp-action=Create>
-            <buton class="textColor btnDiv">
+
+    <div class="text-center m-5"> 
+            <button asp-action=Create class="textColor btnDiv ajax">
                 Dodaj nowy utwór <i class="fas fa-plus-circle fa-lg"></i>
-            </buton>
-        </a>
+            </button>
     </div>
+
     @if (ViewBag.ShowList == true)
     {
-        <div class="table-responsive">
-            <table class="table tableSong">
-                <thead class="bg-danger table-borderless">
-                    <tr>
-                        <th> </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Title)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Album.Name_Album)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Artist.Name_Artist)
-                        </th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                <i class="fas fa-thumbs-up"></i>
-                                &nbsp;
-                                &nbsp;
-                                <i class="fas fa-thumbs-down"></i>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Title)
-                            </td>
-                            <td>
-                                @if (item.Album.Name_Album != null)
-                                {
-                                    <a asp-controller="Songs" asp-action="Album" asp-route-nameAlbum="@item.Album.Name_Album" class="link">@Html.DisplayFor(modelItem => item.Album.Name_Album)</a>
-                                }
-                                else
-                                {
-                                    <span>Brak informacji</span>
-                                }
-                            </td>
-                            <td>
-                                <a asp-controller="Songs" asp-action="Artist" asp-route-name="@item.Artist.Name_Artist" class="link">@Html.DisplayFor(modelItem => item.Artist.Name_Artist)</a>
-                            </td>
-                            <td>
-                                <div class="dropdown w-0">
-
-                                    <button class="btn bg-danger textColor dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Więcej
-                                    </button>
-
-                                    <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
-
-                                        <a asp-action="Edit" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
-                                            <buton>Edytuj</buton>
-                                        </a>
-                                        <a asp-action="Details" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
-                                            <buton>Detale</buton>
-                                        </a>
-
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            <a asp-action="Delete" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
-                                                <buton>Usuń</buton>
-                                            </a>
-                                        }
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                @if (item.UrlAzure != null)
-                                {
-                                    <button onclick="change('https://pracainzynierska.blob.core.windows.net/mp3/' + '@item.UrlAzure', '@item.Title', '@item.Artist.Name_Artist')" id="btnPlay"><i class="fas fa-play-circle fa-2x"></i></button>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+        @await Html.PartialAsync("_Table")
     }
     else
     {

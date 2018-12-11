@@ -32,7 +32,11 @@ namespace inz.Controllers
             artist = applicationDbContext
                         .Where(i => i.Artist.Name_Artist == name);
 
-            return View(await artist.ToListAsync());
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+                return PartialView(await artist.ToListAsync());
+            else
+                return View(await artist.ToListAsync());
         }
 
         public async Task<IActionResult> Album(string nameAlbum)
@@ -44,7 +48,12 @@ namespace inz.Controllers
             album = applicationDbContext
                         .Where(i => i.Album.Name_Album == nameAlbum);
 
-            return View(await album.ToListAsync());
+            
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+                return PartialView(await album.ToListAsync());
+            else
+                return View(await album.ToListAsync());
         }
 
         // GET: Songs
@@ -78,7 +87,12 @@ namespace inz.Controllers
                     }
                 }
             }
-            return View(await result.ToListAsync());
+
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+                return PartialView(await result.ToListAsync());
+            else
+                return View(await result.ToListAsync());
         }
 
         // GET: Songs/Details/5
@@ -99,35 +113,22 @@ namespace inz.Controllers
                 return NotFound();
             }
 
-            return View(song);
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+                return PartialView(song);
+            else
+                return View(song);
         }
 
         // GET: Songs/Create
         public IActionResult Create()
         {
-            ViewData["ID_Album"] = new SelectList(_context.Album, "ID_Album", "ID_Album");
-            ViewData["ID_Artist"] = new SelectList(_context.Artist, "ID_Artist", "ID_Artist");
-            return View();
+            return PartialView();
         }
 
         // POST: Songs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID_Song,Title,ID_Artist,ID_Album")] Song song)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(song);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ID_Album"] = new SelectList(_context.Album, "ID_Album", "ID_Album", song.ID_Album);
-            ViewData["ID_Artist"] = new SelectList(_context.Artist, "ID_Artist", "ID_Artist", song.ID_Artist);
-            return View(song);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateVM(CreateViewModel createViewModel)
@@ -141,7 +142,7 @@ namespace inz.Controllers
                     fileName = createViewModel.Name_mp3.FileName;
                     IFormFile file = createViewModel.Name_mp3;
                     BlobsController blobsController = new BlobsController();
-                    blobsController.UploadBlob(fileName, file);
+                    blobsController.UploadBlob(fileName, file, "mp3");
                 }
 
                 Artist artist = new Artist();
@@ -233,7 +234,12 @@ namespace inz.Controllers
             {
                 return NotFound();
             }
-            return View(createViewModel);
+
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+                return PartialView(createViewModel);
+            else
+                return View(createViewModel);
         }
 
         // POST: Songs/Edit/5
@@ -287,7 +293,7 @@ namespace inz.Controllers
                     fileName = createViewModel.Name_mp3.FileName;
                     IFormFile file = createViewModel.Name_mp3;
                     BlobsController blobsController = new BlobsController();
-                    blobsController.UploadBlob(fileName, file);
+                    blobsController.UploadBlob(fileName, file, "mp3");
                 }
 
                 song.Title = createViewModel.Title;
@@ -336,7 +342,11 @@ namespace inz.Controllers
                 return NotFound();
             }
 
-            return View(song);
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (isAjax)
+                return PartialView(song);
+            else
+                return View(song);
         }
 
         // POST: Songs/Delete/5
@@ -348,10 +358,10 @@ namespace inz.Controllers
             _context.Song.Remove(song);
             await _context.SaveChangesAsync();
 
-            if(song.UrlAzure != null)
+            if (song.UrlAzure != null)
             {
                 BlobsController blobsController = new BlobsController();
-                blobsController.DeleteBlob(song.UrlAzure);
+                blobsController.DeleteBlob(song.UrlAzure, "mp3");
             }
 
             return RedirectToAction("Index", new { all = "all" });
@@ -360,6 +370,30 @@ namespace inz.Controllers
         private bool SongExists(int id)
         {
             return _context.Song.Any(e => e.ID_Song == id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImgAlbum(IFormFile ImgAlbum, int idAlbum)
+        {
+            string fileName = null;
+
+            if (ImgAlbum != null)
+            {
+                fileName = ImgAlbum.FileName;
+                IFormFile file = ImgAlbum;
+                BlobsController blobsController = new BlobsController();
+                blobsController.UploadBlob(fileName, file, "imgalbum");
+            }
+
+            Album album = _context.Album.FirstOrDefault(s => s.ID_Album == idAlbum);
+
+            album.ImgAlbumUrl = fileName;
+            _context.Album.Update(album);
+            _context.SaveChanges();
+
+
+            return RedirectToAction("Index", new { all = "all" });
         }
     }
 }

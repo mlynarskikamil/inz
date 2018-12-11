@@ -19,7 +19,7 @@ namespace inz.Controllers
             return View();
         }
 
-        private CloudBlobContainer GetCloudBlobContainer()
+        private CloudBlobContainer GetCloudBlobContainer(string containerName)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -28,13 +28,13 @@ namespace inz.Controllers
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(Configuration["ConnectionStrings:pracainzynierska_AzureStorageConnectionString"]);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("mp3");
+            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
             return container;
         }
 
-        public string UploadBlob(string fileName, IFormFile file)
+        public string UploadBlob(string fileName, IFormFile file, string containerName)
         {
-            CloudBlobContainer container = GetCloudBlobContainer();
+            CloudBlobContainer container = GetCloudBlobContainer(containerName);
             CloudBlockBlob blob = container.GetBlockBlobReference(fileName);
             using (var fileStream = file.OpenReadStream())
             {
@@ -43,9 +43,9 @@ namespace inz.Controllers
             return "success!";
         }
 
-        public string DeleteBlob (string fileName)
+        public string DeleteBlob (string fileName, string containerName)
         {
-            CloudBlobContainer container = GetCloudBlobContainer();
+            CloudBlobContainer container = GetCloudBlobContainer(containerName);
             CloudBlockBlob blob = container.GetBlockBlobReference(fileName);
             blob.DeleteIfExistsAsync();
             return "succes!";

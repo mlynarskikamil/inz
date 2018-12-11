@@ -28,9 +28,9 @@
         Tekst utworu
     </div>
 <div class="row justify-content-center">
-    <form asp-controller="Songs" asp-action="Index" name="all" class="w-25 ml-2" method="get">
-        <input type="submit" name="all" value="Wróć do listy" class="btn btnDiv textColor mx-auto col-8" style="height:65%;" />
-    </form>
+
+    @await Html.PartialAsync("_ReturnToList")
+
     <a asp-action="Edit" asp-route-id="@Model.ID_Song" class="mr-3 col-3">
         <input type="submit" name="all" value="Edytuj" class="btn btnDiv textColor mx-auto col-8" style="height:65%;" />
     </a>

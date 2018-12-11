@@ -9,7 +9,7 @@
     <h2>Dodaj nowy utwór</h2>
     <hr />
     <div class="w-50 mx-auto">
-        <form asp-action="CreateVM" method="post" enctype="multipart/form-data">
+        <form asp-action="CreateVM" method="post" enctype="multipart/form-data" class="ajaxCreate">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -31,7 +31,7 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Name_mp3"class="btn btn-danger btn-file mt-3 mb-4">
+                <label asp-for="Name_mp3" class="btn btn-danger btn-file mt-3 mb-4">
                     Dodaj plik dźwiękowy <input asp-for="Name_mp3" type="file" style="display: none;">
                 </label>
             </div>
@@ -42,11 +42,8 @@
         </form>
     </div>
 
-    <div class="">
-        <form asp-controller="Songs" asp-action="Index" name="all" class="w-25 mx-auto" method="get">
-            <input type="submit" name="all" value="Wróć do listy" class="btn btnDiv textColor" style="margin:0px;" />
-        </form>
-    </div>
+    @await Html.PartialAsync("_ReturnToList")
+
 </div>
 
 @section Scripts {

@@ -8,90 +8,9 @@
 <div class="panelDiv textColor">
     <h2 class="mb-4">Utwory: @Model.First().Artist.Name_Artist</h2>
 
-    <div class="table-responsive">
-        <table class="table tableSong">
-            <thead class="bg-danger table-borderless">
-                <tr>
-                    <th></th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Title)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Album.Name_Album)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Artist.Name_Artist)
-                    </th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>
-                        <i class="fas fa-thumbs-up"></i>
-                        &nbsp;
-                        &nbsp;
-                        <i class="fas fa-thumbs-down"></i>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @if (item.Album.Name_Album != null)
-                        {
-                            <a asp-controller="Songs" asp-action="Album" asp-route-nameAlbum="@item.Album.Name_Album" class="link">@Html.DisplayFor(modelItem => item.Album.Name_Album)</a>
-                        }
-                        else
-                        {
-                            <span>Brak informacji</span>
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Artist.Name_Artist)
-                    </td>
-                    <td>
-                        <div class="dropdown w-0">
+    @await Html.PartialAsync("_Table")
 
-                            <button class="btn bg-danger textColor dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Więcej
-                            </button>
+    @await Html.PartialAsync("_ReturnToList")
 
-                            <div class="dropdown-menu bg-danger" aria-labelledby="dropdownMenuButton">
-
-                                <a asp-action="Edit" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
-                                    <buton>Edytuj</buton>
-                                </a>
-                                <a asp-action="Details" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
-                                    <buton>Detale</buton>
-                                </a>
-
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a asp-action="Delete" asp-route-id="@item.ID_Song" class="dropdown-item textColor dropIndex btn btn-danger text-center">
-                                        <buton>Usuń</buton>
-                                    </a>
-                                }
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        @if (item.UrlAzure != null)
-                        {
-                        <button onclick="change('https://pracainzynierska.blob.core.windows.net/mp3/' + '@item.UrlAzure', '@item.Title', '@item.Artist.Name_Artist')" id="btnPlay"><i class="fas fa-play-circle fa-2x"></i></button>
-                        }
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="">
-        <form asp-controller="Songs" asp-action="Index" name="all" class="w-25 mx-auto" method="get">
-            <input type="submit" name="all" value="Wróć do listy" class="btn btnDiv textColor" style="margin:0px;" />
-        </form>
-    </div>
 </div>
 
