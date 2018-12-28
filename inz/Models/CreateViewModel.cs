@@ -35,6 +35,7 @@ namespace inz.Models
         [Display(Name = "Producent")]
         public string Name_Producer { get; set; }
 
+        [FileExtensions(Extensions = "mp3", ErrorMessage = "Proszę wprowadzić plik o rozszerzeniu MP3")]
         public IFormFile Name_mp3 { get; set; }
 
         public string UrlAzure { get; set; }

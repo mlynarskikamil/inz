@@ -49,8 +49,6 @@ window.onload = function () {
         var url = $(this).attr("action");
         var search = $(".ajaxForm").serialize();
 
-        alert($(".ajaxForm").serialize());
-
         $.ajax({
             url: url,
             data: $(".ajaxForm").serialize(),
@@ -68,35 +66,37 @@ window.onload = function () {
 
     $(document).on('submit', '.ajaxCreate', function (e) {
 
-        e.preventDefault();
+        if ($('.ajaxCreate').valid()) {
+            e.preventDefault();
 
-        $("#renderbody").fadeOut(500);
+            $("#renderbody").fadeOut(500);
 
 
-        $('.loader').fadeIn(1000);
-        $('.loader').css("display", "block");
+            $('.loader').fadeIn(1000);
+            $('.loader').css("display", "block");
 
-        var url = $(this).attr("action");
+            var url = $(this).attr("action");
 
-        var form = $(this);
-        var formdata = false;
-        if (window.FormData) {
-            formdata = new FormData(form[0]);
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: formdata ? formdata : form.serialize(),
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (data) {
-                $('.loader').css("display", "none").fadeOut(1000);
-                $("#renderbody").html(data).fadeIn(1000);
-                window.history.pushState("", "", url);
+            var form = $(this);
+            var formdata = false;
+            if (window.FormData) {
+                formdata = new FormData(form[0]);
             }
-        });
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: formdata ? formdata : form.serialize(),
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $('.loader').css("display", "none").fadeOut(1000);
+                    $("#renderbody").html(data).fadeIn(1000);
+                    window.history.pushState("", "", url);
+                }
+            });
+        }
     });
 }
 

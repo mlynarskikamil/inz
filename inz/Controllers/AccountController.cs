@@ -110,13 +110,17 @@ namespace inz.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    ApplicationUser userFind = await _userManager.FindByEmailAsync(model.Email);
+                    var User = new ApplicationUser();
+                    await _userManager.AddToRoleAsync(userFind, "User");
+
                     _logger.LogInformation("Użytkownik utworzył nowe konto");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("Użytkownik utworzył nowe konto");
                     return RedirectToLocal(returnUrl);
                 }

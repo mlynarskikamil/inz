@@ -1,4 +1,6 @@
-﻿@{
+﻿@model inz.Models.ContactViewModel
+
+@{
     ViewData["Title"] = "Kontakt";
 }
 
@@ -8,32 +10,43 @@
     <h4 class="textColor">Masz pytanie lub problem? <br /> Napisz do nas!</h4>
 
     <div class="mx-auto w-50 mt-4 send">
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fa fa-user icon"></i></div>
+        <form asp-action="Execute" method="post" enctype="multipart/form-data" class="ajaxForm">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fa fa-user icon"></i></div>
+                    </div>
+                    <input asp-for="name" type="text" class="form-control" placeholder="Proszę wpisać imię" required>
                 </div>
-                <input type="text" class="form-control" placeholder="Proszę wpisać imię" required>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fas fa-at icon"></i></div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-at icon"></i></div>
+                    </div>
+                    <input asp-for="mail" type="email" class="form-control" placeholder="Proszę wpisać mail" required>
                 </div>
-                <input type="email" class="form-control" placeholder="Proszę wpisać mail" required>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text"><i class="fas fa-comment icon"></i></div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-envelope-open icon"></i></div>
+                    </div>
+                    <input asp-for="subject" type="text" class="form-control" placeholder="Proszę wpisać temat mail`a" required>
                 </div>
-                <textarea class="form-control" style="height:150px;" placeholder="Proszę wpisać treść wiadomości" required></textarea>
             </div>
-        </div>
-        <div class="text-center">
-            <input type="submit" value="Wyślij wiadomość" class="btn btn-info btn-block btn-danger py-2">
-        </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-comment icon"></i></div>
+                    </div>
+                    <textarea asp-for="content" class="form-control" style="height:150px;" placeholder="Proszę wpisać treść wiadomości" required></textarea>
+                </div>
+            </div>
+            <div class="text-center">
+                <input type="submit" value="Wyślij wiadomość" class="btn btn-info btn-block btn-danger py-2">
+            </div>
+            <span class="text-danger font-weight-bold" style="position: relative; top:10px;">@ViewData["Send"]</span>
+        </form>
     </div>
 </div>

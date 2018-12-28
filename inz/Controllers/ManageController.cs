@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using inz.Models;
 using inz.Models.ManageViewModels;
 using inz.Services;
+using inz.Data;
 
 namespace inz.Controllers
 {
@@ -20,6 +21,8 @@ namespace inz.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -45,6 +48,40 @@ namespace inz.Controllers
 
         [TempData]
         public string StatusMessage { get; set; }
+
+        public async Task<IActionResult> UpgradePermission(string user)
+        {
+            ApplicationUser userFind = await _userManager.FindByEmailAsync(user);
+            var User = new ApplicationUser();
+            await _userManager.AddToRoleAsync(userFind, "Moderator");
+            await _userManager.RemoveFromRoleAsync(userFind, "User");
+
+            return RedirectToAction("ShowUsers");
+        }
+
+        public async Task<IActionResult> DegradesPermission(string user)
+        {
+            ApplicationUser userFind = await _userManager.FindByEmailAsync(user);
+            var User = new ApplicationUser();
+            await _userManager.AddToRoleAsync(userFind, "User");
+            await _userManager.RemoveFromRoleAsync(userFind, "Moderator");
+
+            return RedirectToAction("ShowUsers");
+        }
+
+        public async Task<IActionResult> BlockUser(string user)
+        {
+            ApplicationUser userFind = await _userManager.FindByEmailAsync(user);
+            await _userManager.SetLockoutEndDateAsync(userFind, DateTime.Today.AddYears(50));
+            return RedirectToAction("ShowUsers");
+        }
+
+        public async Task<IActionResult> UnblockUser(string user)
+        {
+            ApplicationUser userFind = await _userManager.FindByEmailAsync(user);
+            await _userManager.SetLockoutEndDateAsync(userFind, null);
+            return RedirectToAction("ShowUsers");
+        }
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -343,6 +380,24 @@ namespace inz.Controllers
             _logger.LogInformation("User with id '{UserId}' has reset their authentication app key.", user.Id);
 
             return RedirectToAction(nameof(EnableAuthenticator));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ShowUsers()
+        {
+            var list = new List<UsersViewModel>();
+
+            foreach (var user in _userManager.Users.ToList())
+            {
+                list.Add(new UsersViewModel()
+                {
+                    UserName = user.UserName,
+                    UserRole = await _userManager.GetRolesAsync(user),
+                    LockoutEnd = user.LockoutEnd
+                });
+            }
+
+            return View(list);
         }
 
         #region Helpers

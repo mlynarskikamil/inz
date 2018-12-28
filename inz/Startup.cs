@@ -33,6 +33,13 @@ namespace inz
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddIdentityCore<IdentityUser>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = true;
+            });
+
+            services.AddSingleton<IEmailSender, EmailSender>();
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
@@ -40,7 +47,7 @@ namespace inz
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {

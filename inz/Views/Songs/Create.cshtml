@@ -1,5 +1,4 @@
 ﻿@model inz.Models.CreateViewModel
-@Html.ValidationMessageFor(model => model.Title)
 
 @{
     ViewData["Title"] = "Create";
@@ -10,7 +9,6 @@
     <hr />
     <div class="w-50 mx-auto">
         <form asp-action="CreateVM" method="post" enctype="multipart/form-data" class="ajaxCreate">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -30,15 +28,22 @@
                 <input asp-for="Name_Producer" class="form-control" />
             </div>
 
+            @if (User.IsInRole("Admin"))
+            {
             <div class="form-group">
                 <label asp-for="Name_mp3" class="btn btn-danger btn-file mt-3 mb-4">
                     Dodaj plik dźwiękowy <input asp-for="Name_mp3" type="file" style="display: none;">
                 </label>
+                <span asp-validation-for="Name_mp3" class="text-danger"></span>
             </div>
+            }
 
             <div class="form-group">
-                <input type="submit" value="Dodaj utwór" class="btn btn-danger" />
+                <input type="submit" value="Dodaj utwór" class="btn btn-danger" id="submit" />
             </div>
+
+            <span class="text-danger font-weight-bold" style="position: relative; bottom:10px;">@ViewData["Exist"]</span>
+
         </form>
     </div>
 

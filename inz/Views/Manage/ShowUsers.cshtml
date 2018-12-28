@@ -1,0 +1,63 @@
+﻿@model IEnumerable<inz.Models.ManageViewModels.UsersViewModel>
+
+@{
+    ViewData["Title"] = "Pokaż użytkowników";
+}
+
+
+<div class="panelDiv textColor">
+    <h2>Użytkownicy aplikacji</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nazwa użytkownika
+                </th>
+                <th>
+                    Rola użytkownika
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserRole)
+                    </td>
+                    <td>
+                        @if (item.UserRole.Contains("User"))
+                        {
+                            <button onclick="location.href='@Url.Action("UpgradePermission","Manage", new { user = item.UserName })'" class="link btn">Awasuj range</button>
+                        }
+                        else if (item.UserRole.Contains("Moderator"))
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                <button onclick="location.href='@Url.Action("DegradesPermission", "Manage", new { user = item.UserName })'" class="link btn">Degraduj range</button>
+                            }
+                        }
+
+                        @if (!item.UserRole.Contains("Admin"))
+                        {
+                            if (!item.LockoutEnd.HasValue)
+                            {
+                                <button onclick="location.href='@Url.Action("BlockUser", "Manage", new { user = item.UserName })'" class="link btn">Zablokuj użytkownika</button>
+                            }
+                            else
+                            {
+                                <button onclick="location.href='@Url.Action("UnblockUser", "Manage", new { user = item.UserName })'" class="link btn">Odblokuj użytkownika</button>
+                                DateTimeOffset date = item.LockoutEnd.Value.AddYears(-50);
+                                <span>Zablokowany dnia: @date.ToString("yyyy/MM/dd")</span>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

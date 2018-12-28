@@ -133,6 +133,8 @@ namespace inz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateVM(CreateViewModel createViewModel)
         {
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
             if (ModelState.IsValid)
             {
                 string fileName = null;
@@ -179,30 +181,48 @@ namespace inz.Controllers
                 }
 
                 Song song = new Song();
-                song.Title = createViewModel.Title;
-                song.ID_Album = _context.Album
-                    .Where(c => c.Name_Album.Equals(createViewModel.Name_Album))
-                    .Select(c => c.ID_Album)
-                    .First();
+                var resultSong = _context.Song
+                    .Where(i => i.Title == createViewModel.Title)
+                    .Count();
+                if (resultSong < 1)
+                {
+                    song.Title = createViewModel.Title;
+                    song.ID_Album = _context.Album
+                        .Where(c => c.Name_Album.Equals(createViewModel.Name_Album))
+                        .Select(c => c.ID_Album)
+                        .First();
 
-                song.ID_Artist = _context.Artist
-                    .Where(c => c.Name_Artist.Equals(createViewModel.Name_Artist))
-                    .Select(c => c.ID_Artist)
-                    .First();
+                    song.ID_Artist = _context.Artist
+                        .Where(c => c.Name_Artist.Equals(createViewModel.Name_Artist))
+                        .Select(c => c.ID_Artist)
+                        .First();
 
-                song.ID_Producer = _context.Producer
-                    .Where(c => c.Name_Producer.Equals(createViewModel.Name_Producer))
-                    .Select(c => c.ID_Producer)
-                    .FirstOrDefault();
+                    song.ID_Producer = _context.Producer
+                        .Where(c => c.Name_Producer.Equals(createViewModel.Name_Producer))
+                        .Select(c => c.ID_Producer)
+                        .FirstOrDefault();
 
-                song.UrlAzure = fileName;
+                    song.UrlAzure = fileName;
 
-                _context.Song.Add(song);
-                _context.SaveChanges();
+                    _context.Song.Add(song);
+                    _context.SaveChanges();
 
-                return RedirectToAction("Index", new { all = "all" });
+                    return RedirectToAction("Index", new { all = "all" });
+                }
+                else
+                {
+                    ViewData["Exist"] = "Podany utwór już istnieje!";
+                    if (isAjax)
+                        return PartialView("Create");
+                    else
+                        return View("Create");
+                    //return View("Create");
+                }              
             }
-            return View();
+            if (isAjax)
+                return PartialView("Create");
+            else
+                return View("Create");
         }
 
         [HttpGet]
