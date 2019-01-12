@@ -8,6 +8,87 @@
 <div class="panelDiv textColor">
     <h2 class="mb-4">Utwory: @Model.First().Artist.Name_Artist</h2>
 
+
+    @{var idArtist = @Model.First().ID_Artist; }
+
+    @if (Model.First().Artist.ImgArtistUrl == null)
+    {
+        <form id="formImgArtist" asp-action="AddImgArtist" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input name="idArtist" type="hidden" value="@idArtist" />
+            </div>
+
+            <div class="form-group">
+                <input name="ImgArtist" type="file" id="selectedFile" style="display: none;" />
+            </div>
+
+            <input id="buttonSubmit" class="float-right textColor btnDiv" type="button" value="Dodaj zdjęcie artysty" onclick="document.getElementById('selectedFile').click();" />
+        </form>
+    }
+    else
+    {
+        <img id="albumImg" src="https://pracainzynierska.blob.core.windows.net/imgartist/@Model.First().Artist.ImgArtistUrl" width="150px;" height="150px;" />
+        <form id="formImgArtist" asp-action="EditImgArtist" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input name="idArtist" type="hidden" value="@idArtist" />
+            </div>
+
+            <div class="form-group">
+                <input name="ImgArtist" type="file" id="selectedFile" style="display: none;" />
+            </div>
+
+            <input id="buttonSubmit" class="float-right textColor btnDiv" type="button" value="Edytuj zdjęcie artysty" onclick="document.getElementById('selectedFile').click();" />
+        </form>
+    }
+
+    <button asp-controller="Songs" asp-action="EditArtist" asp-route-id="@idArtist" class="float-right textColor btnDiv ajax">Edytuj informacje o artyście</button>
+
+    <script>
+        document.getElementById("selectedFile").onchange = function () {
+            var fileExtension = ['jpg', 'jpeg'];
+            if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1)
+                alert("Poprawny format wprowadzenia okładki to : " + fileExtension.join(", "));
+
+            else {
+                document.getElementById("formImgArtist").submit();
+            }
+        };
+    </script>
+
+    <div class="float-left mb-5">
+        <span class="text-danger">Imię: </span>
+        @if (@Model.First().Artist.Name != null)
+        {
+            @Model.First().Artist.Name
+        }
+        else
+        {
+            <span>Brak informacji</span>
+        }
+
+        <br />
+        <span class="text-danger">Nazwisko:</span>
+        @if (@Model.First().Artist.Surname != null)
+        {
+            @Model.First().Artist.Surname
+        }
+        else
+        {
+            <span>Brak informacji</span>
+        }
+
+        <br />
+        <span class="text-danger">Urodzony: </span>
+        @if (@Model.First().Artist.Birthday.ToString("dd MMMM yyyy") != "01 stycznia 0001")
+        {
+            @Model.First().Artist.Birthday.ToString("dd MMMM yyyy")
+        }
+        else
+        {
+            <span>Brak informacji</span>
+        }
+    </div>
+
     @await Html.PartialAsync("_Table")
 
     @await Html.PartialAsync("_ReturnToList")

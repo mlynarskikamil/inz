@@ -11,9 +11,10 @@ using System;
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181230150612_lubie")]
+    partial class lubie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,8 +32,7 @@ namespace inz.Data.Migrations
 
                     b.Property<string>("Name_Album");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("ReleaseDate");
 
                     b.HasKey("ID_Album");
 
@@ -64,6 +64,8 @@ namespace inz.Data.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
+                    b.Property<int?>("OpinionID_Opinion");
+
                     b.Property<string>("PasswordHash");
 
                     b.Property<string>("PhoneNumber");
@@ -87,6 +89,8 @@ namespace inz.Data.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("OpinionID_Opinion");
+
                     b.ToTable("AspNetUsers");
                 });
 
@@ -95,10 +99,7 @@ namespace inz.Data.Migrations
                     b.Property<int>("ID_Artist")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImgArtistUrl");
+                    b.Property<DateTime>("Birthday");
 
                     b.Property<string>("Name");
 
@@ -116,21 +117,13 @@ namespace inz.Data.Migrations
                     b.Property<int>("ID_Opinion")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
-
                     b.Property<bool>("Direction");
 
-                    b.Property<int?>("ID_Song");
+                    b.Property<int>("ID_Song");
 
-                    b.Property<string>("Id");
+                    b.Property<int>("Id");
 
                     b.HasKey("ID_Opinion");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ID_Song")
-                        .IsUnique()
-                        .HasFilter("[ID_Song] IS NOT NULL");
 
                     b.ToTable("Opinion");
                 });
@@ -158,20 +151,11 @@ namespace inz.Data.Migrations
 
                     b.Property<int?>("ID_Producer");
 
-                    b.Property<int>("Like");
-
-                    b.Property<DateTime>("ReleaseSong")
-                        .HasColumnType("date");
-
-                    b.Property<string>("TextSong");
+                    b.Property<int?>("OpinionID_Opinion");
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("Unlike");
-
                     b.Property<string>("UrlAzure");
-
-                    b.Property<string>("VideoUrl");
 
                     b.HasKey("ID_Song");
 
@@ -180,6 +164,8 @@ namespace inz.Data.Migrations
                     b.HasIndex("ID_Artist");
 
                     b.HasIndex("ID_Producer");
+
+                    b.HasIndex("OpinionID_Opinion");
 
                     b.ToTable("Song");
                 });
@@ -292,15 +278,11 @@ namespace inz.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("inz.Models.Opinion", b =>
+            modelBuilder.Entity("inz.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("inz.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("inz.Models.Song", "Song")
-                        .WithOne("Opinion")
-                        .HasForeignKey("inz.Models.Opinion", "ID_Song");
+                    b.HasOne("inz.Models.Opinion")
+                        .WithMany("Users")
+                        .HasForeignKey("OpinionID_Opinion");
                 });
 
             modelBuilder.Entity("inz.Models.Song", b =>
@@ -316,6 +298,10 @@ namespace inz.Data.Migrations
                     b.HasOne("inz.Models.Producer", "Producer")
                         .WithMany("Songs")
                         .HasForeignKey("ID_Producer");
+
+                    b.HasOne("inz.Models.Opinion")
+                        .WithMany("Songs")
+                        .HasForeignKey("OpinionID_Opinion");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

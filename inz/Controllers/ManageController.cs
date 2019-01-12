@@ -53,7 +53,7 @@ namespace inz.Controllers
         {
             ApplicationUser userFind = await _userManager.FindByEmailAsync(user);
             var User = new ApplicationUser();
-            await _userManager.AddToRoleAsync(userFind, "Moderator");
+            await _userManager.AddToRoleAsync(userFind, "Wydawca");
             await _userManager.RemoveFromRoleAsync(userFind, "User");
 
             return RedirectToAction("ShowUsers");
@@ -64,7 +64,7 @@ namespace inz.Controllers
             ApplicationUser userFind = await _userManager.FindByEmailAsync(user);
             var User = new ApplicationUser();
             await _userManager.AddToRoleAsync(userFind, "User");
-            await _userManager.RemoveFromRoleAsync(userFind, "Moderator");
+            await _userManager.RemoveFromRoleAsync(userFind, "Wydawca");
 
             return RedirectToAction("ShowUsers");
         }

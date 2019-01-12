@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using inz.Data;
 using inz.Models;
 using inz.Services;
+using System.Globalization;
 
 namespace inz
 {
@@ -49,6 +50,10 @@ namespace inz
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
+            var cultureInfo = new CultureInfo("pl-PL");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

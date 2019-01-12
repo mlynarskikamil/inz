@@ -91,6 +91,7 @@
                     var percent = e.offsetX / this.offsetWidth;
                     mediaPlayer.currentTime = percent * mediaPlayer.duration;
                     progressbar.value = percent / 100;
+                    alert("procent:" + percent + ", długość utworu: " + mediaPlayer.duration + ", obecny czas: " + mediaPlayer.currentTime + ", wartość progressbar: " + progressbar.value);
                 }
             </script>
 

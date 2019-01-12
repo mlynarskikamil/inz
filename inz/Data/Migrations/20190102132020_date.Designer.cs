@@ -11,9 +11,10 @@ using System;
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190102132020_date")]
+    partial class date
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,8 +32,7 @@ namespace inz.Data.Migrations
 
                     b.Property<string>("Name_Album");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("ReleaseDate");
 
                     b.HasKey("ID_Album");
 
@@ -160,18 +160,11 @@ namespace inz.Data.Migrations
 
                     b.Property<int>("Like");
 
-                    b.Property<DateTime>("ReleaseSong")
-                        .HasColumnType("date");
-
-                    b.Property<string>("TextSong");
-
                     b.Property<string>("Title");
 
                     b.Property<int>("Unlike");
 
                     b.Property<string>("UrlAzure");
-
-                    b.Property<string>("VideoUrl");
 
                     b.HasKey("ID_Song");
 

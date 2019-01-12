@@ -7,16 +7,11 @@
 <div class="panelDiv textColor">
     <h2 class="mb-4">Album: @Model.First().Album.Name_Album</h2>
 
-    @*<form name="btn btn-danger btn-file mt-3 mb-4">
-            Dodaj plik dźwiękowy <input type="file" style="display: none;">
-            <button class="float-right textColor btnDiv">Dodaj okładke albumu </button>
-        </form>*@
-
     @{var idAlbum = @Model.First().ID_Album; }
 
     @if (Model.First().Album.ImgAlbumUrl == null)
     {
-        <form id="formImgAlbum" asp-action="AddImgAlbum" id="submitForm" method="post" enctype="multipart/form-data">
+        <form id="formImgAlbum" asp-action="AddImgAlbum" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <input name="idAlbum" type="hidden" value="@idAlbum" />
             </div>
@@ -26,22 +21,61 @@
             </div>
 
             <input id="buttonSubmit" class="float-right textColor btnDiv" type="button" value="Dodaj okładke albumu" onclick="document.getElementById('selectedFile').click();" />
-
-            <script>
-                document.getElementById("selectedFile").onchange = function () {
-                    document.getElementById("formImgAlbum").submit();
-                };
-            </script>
         </form>
     }
     else
     {
         <img id="albumImg" src="https://pracainzynierska.blob.core.windows.net/imgalbum/@Model.First().Album.ImgAlbumUrl" width="150px;" height="150px;" />
+        <form id="formImgAlbum" asp-action="EditImgAlbum" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input name="idAlbum" type="hidden" value="@idAlbum" />
+            </div>
+
+            <div class="form-group">
+                <input name="ImgAlbum" type="file" id="selectedFile" style="display: none;" />
+            </div>
+
+            <input id="buttonSubmit" class="float-right textColor btnDiv" type="button" value="Edytuj okładke " onclick="document.getElementById('selectedFile').click();" />
+        </form>
     }
 
-    <br />
+    <button asp-controller="Songs" asp-action="EditAlbum" asp-route-id="@idAlbum" class="float-right textColor btnDiv ajax">Edytuj informacje o albumie</button>
 
-    <span class="float-left mb-5">Informacje o albumie</span>
+    <br />
+    <div class="float-left mb-5">
+        <span class="text-danger float-left">Data wydania: </span>
+        @if (@Model.First().Album.ReleaseDate.ToString("dd MMMM yyyy") != "01 stycznia 0001")
+        {
+            <span class="float-left">&nbsp; @Model.First().Album.ReleaseDate.ToString("dd MMMM yyyy")</span>
+        }
+        else
+        {
+            <span class="float-left">&nbsp; Brak informacji</span>
+        }
+        <br />
+        <span class="float-left text-danger">Informacje o albumie: </span>
+        <br />
+        @if (@Model.First().Album.InfoAlbum != null)
+        {
+        <span class="float-left text-justify">@Model.First().Album.InfoAlbum</span>
+        }
+        else
+        {
+            <span class="float-left">&nbsp; Brak informacji</span>
+        }       
+    </div>
+
+    <script>
+        document.getElementById("selectedFile").onchange = function () {
+            var fileExtension = ['jpg', 'jpeg'];
+            if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1)
+                alert("Poprawny format wprowadzenia okładki to : " + fileExtension.join(", "));
+
+            else {
+                document.getElementById("formImgAlbum").submit();
+            }
+        };
+    </script>
 
     @await Html.PartialAsync("_Table")
 

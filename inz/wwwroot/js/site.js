@@ -43,7 +43,7 @@ window.onload = function () {
 
 
     $(document).on('submit', '.ajaxForm', function (e) {
-
+        
         e.preventDefault();
 
         var url = $(this).attr("action");
@@ -66,16 +66,15 @@ window.onload = function () {
 
     $(document).on('submit', '.ajaxCreate', function (e) {
 
-        if ($('.ajaxCreate').valid()) {
             e.preventDefault();
 
             $("#renderbody").fadeOut(500);
-
 
             $('.loader').fadeIn(1000);
             $('.loader').css("display", "block");
 
             var url = $(this).attr("action");
+
 
             var form = $(this);
             var formdata = false;
@@ -96,7 +95,6 @@ window.onload = function () {
                     window.history.pushState("", "", url);
                 }
             });
-        }
     });
 }
 

@@ -4,6 +4,8 @@
     ViewData["Title"] = "_table";
 }
 
+<span class="text-danger mb-5 font-weight-bold">@TempData["checked"] </span>
+
 <div class="table-responsive">
     <table class="table tableSong">
         <thead class="bg-danger table-borderless">
@@ -27,10 +29,14 @@
             {
                 <tr>
                     <td>
-                        <i class="fas fa-thumbs-up"></i>
-                        &nbsp;
-                        &nbsp;
-                        <i class="fas fa-thumbs-down"></i>
+                        <button asp-controller="Songs" asp-action="Like" asp-route-idSong="@item.ID_Song" asp-route-direction="true" class="btnEdit text-white ajax"><i class="fas fa-thumbs-up"></i></button>
+                        <span> @item.Like</span>
+                        <span>
+                            &nbsp;
+                            &nbsp;
+                        </span>
+                        <button asp-controller="Songs" asp-action="Like" asp-route-idSong="@item.ID_Song" asp-route-direction="false" class="btnEdit text-white ajax"><i class="fas fa-thumbs-down"></i></button>
+                        <span> @item.Unlike</span>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Title)

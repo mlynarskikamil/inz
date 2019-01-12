@@ -34,7 +34,7 @@
                         {
                             <button onclick="location.href='@Url.Action("UpgradePermission","Manage", new { user = item.UserName })'" class="link btn">Awasuj range</button>
                         }
-                        else if (item.UserRole.Contains("Moderator"))
+                        else if (item.UserRole.Contains("Wydawca"))
                         {
                             if (User.IsInRole("Admin"))
                             {

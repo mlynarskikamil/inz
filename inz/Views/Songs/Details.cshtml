@@ -8,31 +8,73 @@
 <div class="panelDiv textColor">
     <div class="row">
         <div class="col-4">
-            <h5>Tytuł:</h5> <h3>@Html.DisplayFor(model => model.Title)</h3>
+            <h5 class="text-danger">Tytuł:</h5> <h3>@Html.DisplayFor(model => model.Title)</h3>
         </div>
         <div class="col-4">
-            <h5>Album:</h5> <h3> @Html.DisplayFor(model => model.Album.Name_Album)</h3>
+            <h5 class="text-danger">Album:</h5> <h3> @Html.DisplayFor(model => model.Album.Name_Album)</h3>
         </div>
         <div class="col-4 mb-4">
-            <h5>Artysta:</h5> <h3>@Html.DisplayFor(model => model.Artist.Name_Artist)</h3>
+            <h5 class="text-danger">Artysta:</h5> <h3>@Html.DisplayFor(model => model.Artist.Name_Artist)</h3>
         </div>
         <div class="col-6">
-            <h5>Produkcja podkładu:</h5> <h3>@Html.DisplayFor(model => model.Producer.Name_Producer)</h3>
+            <h5 class="text-danger">Produkcja podkładu:</h5>
+            @if (Model.Producer.Name_Producer != null)
+            {
+                <h3>@Html.DisplayFor(model => model.Producer.Name_Producer)</h3>
+            }
+            else
+            {
+                <h3>Brak danych</h3>
+            }
         </div>
         <div class="col-6 mb-4">
-            <h5>Gościnnie:</h5>
+            @{
+                var date = Model.ReleaseSong.ToString("dd MMMM yyyy");
+            }
+            <h5 class="text-danger">Data publikacji:</h5>
+            @if (date == "01 stycznia 0001")
+            {
+                <h3>Brak danych</h3>
+            }
+            else
+            {
+                <h3>@date</h3>
+            }
+        </div>
+        <div class="col-12">
+            <span class="text-danger">Teledysk:</span>
+            <br />
+            @if (Model.VideoUrl != null)
+            {
+                var url = @Model.VideoUrl;          
+                <iframe width="420" height="315" src="@url"></iframe>
+            }
+            else
+            {
+                <span>Brak danych</span>
+            }
         </div>
     </div>
     <hr />
-<div>
-        Tekst utworu
+    <div class="mb-5">
+        <span class="text-danger">Tekst utworu: </span>
+        <br />
+        @if (Model.TextSong != null)
+        {
+        <pre class="textColor">@Model.TextSong</pre>
+        }
+        else
+        {
+            <span>Brak danych</span>
+        }
     </div>
-<div class="row justify-content-center">
+<div>
 
     @await Html.PartialAsync("_ReturnToList")
 
-    <a asp-action="Edit" asp-route-id="@Model.ID_Song" class="mr-3 col-3">
-        <input type="submit" name="all" value="Edytuj" class="btn btnDiv textColor mx-auto col-8" style="height:65%;" />
-    </a>
+    <form asp-action="Edit" asp-route-id="@Model.ID_Song" class="ajaxForm">
+        <input type="submit" name="all" value="Edytuj" class="btn btnDiv textColor w-25 mx-auto" style="height:65%;" />
+    </form>
+
 </div>
 </div>

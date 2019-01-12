@@ -18,6 +18,7 @@ namespace inz.Models
             this.Name_Producer = Name_Producer;
             this.Name_mp3 = Name_mp3;
             this.UrlAzure = UrlAzure;
+            this.ReleaseSong = DateTime.Now;
         }
         public int ID_Song { get; set; }
 
@@ -35,7 +36,14 @@ namespace inz.Models
         [Display(Name = "Producent")]
         public string Name_Producer { get; set; }
 
-        [FileExtensions(Extensions = "mp3", ErrorMessage = "Proszę wprowadzić plik o rozszerzeniu MP3")]
+        [Display(Name = "Data publikacji")]
+        public DateTime ReleaseSong { get; set; }
+
+        [Display(Name = "Odnośnik do teledysku")]
+        public string VideoUrl { get; set; }
+
+        public string TextSong { get; set; }
+
         public IFormFile Name_mp3 { get; set; }
 
         public string UrlAzure { get; set; }

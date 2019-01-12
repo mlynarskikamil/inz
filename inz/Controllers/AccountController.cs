@@ -61,7 +61,7 @@ namespace inz.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Użytkownik zalogowany");
@@ -74,7 +74,7 @@ namespace inz.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Nieprawidłowe dane do logowania");
+                    ModelState.AddModelError(string.Empty, "Nieprawidłowe dane do logowania lub nie potwierdzony mail");
                     return View(model);
                 }
             }

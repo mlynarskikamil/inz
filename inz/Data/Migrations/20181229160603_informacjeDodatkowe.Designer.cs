@@ -11,9 +11,10 @@ using System;
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181229160603_informacjeDodatkowe")]
+    partial class informacjeDodatkowe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,8 +32,7 @@ namespace inz.Data.Migrations
 
                     b.Property<string>("Name_Album");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("ReleaseDate");
 
                     b.HasKey("ID_Album");
 
@@ -95,10 +95,7 @@ namespace inz.Data.Migrations
                     b.Property<int>("ID_Artist")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImgArtistUrl");
+                    b.Property<DateTime>("Birthday");
 
                     b.Property<string>("Name");
 
@@ -109,30 +106,6 @@ namespace inz.Data.Migrations
                     b.HasKey("ID_Artist");
 
                     b.ToTable("Artist");
-                });
-
-            modelBuilder.Entity("inz.Models.Opinion", b =>
-                {
-                    b.Property<int>("ID_Opinion")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<bool>("Direction");
-
-                    b.Property<int?>("ID_Song");
-
-                    b.Property<string>("Id");
-
-                    b.HasKey("ID_Opinion");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ID_Song")
-                        .IsUnique()
-                        .HasFilter("[ID_Song] IS NOT NULL");
-
-                    b.ToTable("Opinion");
                 });
 
             modelBuilder.Entity("inz.Models.Producer", b =>
@@ -158,20 +131,9 @@ namespace inz.Data.Migrations
 
                     b.Property<int?>("ID_Producer");
 
-                    b.Property<int>("Like");
-
-                    b.Property<DateTime>("ReleaseSong")
-                        .HasColumnType("date");
-
-                    b.Property<string>("TextSong");
-
                     b.Property<string>("Title");
 
-                    b.Property<int>("Unlike");
-
                     b.Property<string>("UrlAzure");
-
-                    b.Property<string>("VideoUrl");
 
                     b.HasKey("ID_Song");
 
@@ -290,17 +252,6 @@ namespace inz.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("inz.Models.Opinion", b =>
-                {
-                    b.HasOne("inz.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("inz.Models.Song", "Song")
-                        .WithOne("Opinion")
-                        .HasForeignKey("inz.Models.Opinion", "ID_Song");
                 });
 
             modelBuilder.Entity("inz.Models.Song", b =>
