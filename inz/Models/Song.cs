@@ -50,6 +50,10 @@ namespace inz.Models
 
         public virtual Opinion Opinion { get; set; }
 
+        public virtual Favorite Favorite { get; set; }
+
+        public string ID_User { get; set; }
+
         internal static Task<string> ToListAsync()
         {
             throw new NotImplementedException();
@@ -119,9 +123,37 @@ namespace inz.Models
         public int? ID_Song { get; set; }
         public virtual Song Song { get; set; }
 
-        public string Id { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public string Id_User { get; set; }
 
         public bool Direction { get; set; }
+    }
+
+    public class Favorite
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID_Favorite { get; set; }
+
+        public int? ID_Song { get; set; }
+        public virtual Song Song { get; set; }
+
+        public string Id_User { get; set; }
+    }
+
+    public class Changelog
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID_Changelog { get; set; }
+
+        public string Changelog_Event { get; set; }
+
+        public string oldValue { get; set; }
+
+        public string newValue { get; set; }
+
+        public string ID_User { get; set; }
+
+        public int ID_Song { get; set; }
     }
 }

@@ -37,7 +37,7 @@
                 <input asp-for="VideoUrl" class="form-control" />
             </div>
 
-            @if (User.IsInRole("Admin"))
+            @if (User.IsInRole("Admin") || User.IsInRole("Wydawca"))
             {
                 <div class="form-group">
                     <label asp-for="Name_mp3" class="btn btn-danger btn-file mt-3 mb-4">

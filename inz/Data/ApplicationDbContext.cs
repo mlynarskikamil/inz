@@ -28,5 +28,7 @@ namespace inz.Data
         public DbSet<inz.Models.Album> Album { get; set; }
         public DbSet<inz.Models.Producer> Producer { get; set; }
         public DbSet<inz.Models.Opinion> Opinion { get; set; }
+        public DbSet<inz.Models.Favorite> Favorite { get; set; }
+        public DbSet<inz.Models.Changelog> Changelog { get; set; }
     }
 }

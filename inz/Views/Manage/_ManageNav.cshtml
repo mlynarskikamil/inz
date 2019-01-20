@@ -6,7 +6,7 @@
     <ul class="nav nav-pills nav-stacked">
         <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext) mx-auto"><a asp-action="ChangePassword"><h5>Zmień hasło</h5></a></li>
 
-        @if (User.IsInRole("Admin") || User.IsInRole("Wydawca"))
+        @if (User.IsInRole("Admin"))
         {
             <li class=" mx-auto"><a asp-action="ShowUsers"><h5>Wyświetl użytkowników</h5></a></li>
         }

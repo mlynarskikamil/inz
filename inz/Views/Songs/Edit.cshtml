@@ -40,7 +40,7 @@
                 <textarea asp-for="TextSong" class="form-control" asp-items="@Html.DisplayFor(model => model.TextSong)" rows="10" cols="50"></textarea>
             </div>
 
-            @if (Model.UrlAzure == null && User.IsInRole("Admin"))
+            @if (Model.UrlAzure == null && (User.IsInRole("Admin") || User.IsInRole("Wydawca")))
             {
                 <div class="form-group">
                     <label asp-for="Name_mp3" class="btn btn-danger btn-file mt-3">

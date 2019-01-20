@@ -11,9 +11,10 @@ using System;
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190118162454_log2")]
+    partial class log2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,9 +119,7 @@ namespace inz.Data.Migrations
 
                     b.Property<string>("Changelog_Event");
 
-                    b.Property<int>("ID_Song");
-
-                    b.Property<string>("ID_User");
+                    b.Property<string>("Id_User");
 
                     b.Property<string>("newValue");
 

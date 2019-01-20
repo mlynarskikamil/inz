@@ -11,9 +11,10 @@ using System;
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190118152021_logi")]
+    partial class logi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,11 +117,11 @@ namespace inz.Data.Migrations
                     b.Property<int>("ID_Changelog")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Changelog_Event");
+                    b.Property<string>("ApplicationUserId");
 
-                    b.Property<int>("ID_Song");
+                    b.Property<int>("ID_Changelog_Event");
 
-                    b.Property<string>("ID_User");
+                    b.Property<string>("Id_User");
 
                     b.Property<string>("newValue");
 
@@ -128,7 +129,23 @@ namespace inz.Data.Migrations
 
                     b.HasKey("ID_Changelog");
 
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ID_Changelog_Event");
+
                     b.ToTable("Changelog");
+                });
+
+            modelBuilder.Entity("inz.Models.Changelog_Name_List", b =>
+                {
+                    b.Property<int>("ID_Changelog_Event")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name_change");
+
+                    b.HasKey("ID_Changelog_Event");
+
+                    b.ToTable("Changelog_Name_List");
                 });
 
             modelBuilder.Entity("inz.Models.Favorite", b =>
@@ -326,6 +343,18 @@ namespace inz.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("inz.Models.Changelog", b =>
+                {
+                    b.HasOne("inz.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("inz.Models.Changelog_Name_List", "Changelog_Name_List")
+                        .WithMany("changelogs")
+                        .HasForeignKey("ID_Changelog_Event")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("inz.Models.Favorite", b =>

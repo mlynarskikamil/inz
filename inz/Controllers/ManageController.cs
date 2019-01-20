@@ -14,6 +14,7 @@ using inz.Models;
 using inz.Models.ManageViewModels;
 using inz.Services;
 using inz.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace inz.Controllers
 {

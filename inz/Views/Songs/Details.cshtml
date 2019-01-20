@@ -46,8 +46,8 @@
             <br />
             @if (Model.VideoUrl != null)
             {
-                var url = @Model.VideoUrl;          
-                <iframe width="420" height="315" src="@url"></iframe>
+                var url = @Model.VideoUrl;
+                <iframe width="420" height="315" src="@url" class="ytVideo"></iframe>
             }
             else
             {
@@ -61,20 +61,20 @@
         <br />
         @if (Model.TextSong != null)
         {
-        <pre class="textColor">@Model.TextSong</pre>
+            <pre class="textColor text">@Model.TextSong</pre>
         }
         else
         {
             <span>Brak danych</span>
         }
     </div>
-<div>
+    <div>
 
-    @await Html.PartialAsync("_ReturnToList")
+        <form asp-action="Edit" asp-route-id="@Model.ID_Song" class="ajaxForm">
+            <input type="submit" name="all" value="Edytuj" class="btn btnDiv textColor w-25 mx-auto" style="height:65%;" />
+        </form>
 
-    <form asp-action="Edit" asp-route-id="@Model.ID_Song" class="ajaxForm">
-        <input type="submit" name="all" value="Edytuj" class="btn btnDiv textColor w-25 mx-auto" style="height:65%;" />
-    </form>
+        @await Html.PartialAsync("_ReturnToList")
 
-</div>
+    </div>
 </div>

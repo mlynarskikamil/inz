@@ -11,9 +11,10 @@ using System;
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190116135700_addUser3")]
+    partial class addUser3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,56 +112,22 @@ namespace inz.Data.Migrations
                     b.ToTable("Artist");
                 });
 
-            modelBuilder.Entity("inz.Models.Changelog", b =>
-                {
-                    b.Property<int>("ID_Changelog")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Changelog_Event");
-
-                    b.Property<int>("ID_Song");
-
-                    b.Property<string>("ID_User");
-
-                    b.Property<string>("newValue");
-
-                    b.Property<string>("oldValue");
-
-                    b.HasKey("ID_Changelog");
-
-                    b.ToTable("Changelog");
-                });
-
-            modelBuilder.Entity("inz.Models.Favorite", b =>
-                {
-                    b.Property<int>("ID_Favorite")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ID_Song");
-
-                    b.Property<string>("Id_User");
-
-                    b.HasKey("ID_Favorite");
-
-                    b.HasIndex("ID_Song")
-                        .IsUnique()
-                        .HasFilter("[ID_Song] IS NOT NULL");
-
-                    b.ToTable("Favorite");
-                });
-
             modelBuilder.Entity("inz.Models.Opinion", b =>
                 {
                     b.Property<int>("ID_Opinion")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<bool>("Direction");
 
                     b.Property<int?>("ID_Song");
 
-                    b.Property<string>("Id_User");
+                    b.Property<string>("Id");
 
                     b.HasKey("ID_Opinion");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ID_Song")
                         .IsUnique()
@@ -328,15 +295,12 @@ namespace inz.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("inz.Models.Favorite", b =>
-                {
-                    b.HasOne("inz.Models.Song", "Song")
-                        .WithOne("Favorite")
-                        .HasForeignKey("inz.Models.Favorite", "ID_Song");
-                });
-
             modelBuilder.Entity("inz.Models.Opinion", b =>
                 {
+                    b.HasOne("inz.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("inz.Models.Song", "Song")
                         .WithOne("Opinion")
                         .HasForeignKey("inz.Models.Opinion", "ID_Song");

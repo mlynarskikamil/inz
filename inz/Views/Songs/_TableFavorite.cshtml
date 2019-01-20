@@ -78,9 +78,9 @@
                                     </button>
                                 }
 
-                                    <button asp-action="Favorite" asp-route-id="@item.ID_Song" asp-route-inFavorite="false" class="dropdown-item textColor dropIndex btn btn-danger text-center ajax">
-                                        <span>Dodaj do ulubionych</span>
-                                    </button>
+                                <button asp-action="Favorite" asp-route-id="@item.ID_Song" asp-route-inFavorite="true" class="dropdown-item textColor dropIndex btn btn-danger text-center ajax">
+                                    <span>Usuń z ulubionych</span>
+                                </button>
                             </div>
                         </div>
                     </td>

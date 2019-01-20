@@ -11,9 +11,10 @@ using System;
 namespace inz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190118113239_changelog")]
+    partial class changelog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,24 +112,16 @@ namespace inz.Data.Migrations
                     b.ToTable("Artist");
                 });
 
-            modelBuilder.Entity("inz.Models.Changelog", b =>
+            modelBuilder.Entity("inz.Models.Changelog_Name_List", b =>
                 {
-                    b.Property<int>("ID_Changelog")
+                    b.Property<int>("ID_Changelog_Event")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Changelog_Event");
+                    b.Property<int>("Name_change");
 
-                    b.Property<int>("ID_Song");
+                    b.HasKey("ID_Changelog_Event");
 
-                    b.Property<string>("ID_User");
-
-                    b.Property<string>("newValue");
-
-                    b.Property<string>("oldValue");
-
-                    b.HasKey("ID_Changelog");
-
-                    b.ToTable("Changelog");
+                    b.ToTable("Changelog_Name_List");
                 });
 
             modelBuilder.Entity("inz.Models.Favorite", b =>

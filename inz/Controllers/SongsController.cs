@@ -12,6 +12,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNet.Identity;
+using System.Text.RegularExpressions;
 
 namespace inz.Controllers
 {
@@ -59,7 +60,7 @@ namespace inz.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index(string search, string all)
+        public async Task<IActionResult> Index(string search, string all, string favorite, DateTime dateFrom, DateTime dateTo)
         {
             var userId = User.Identity.GetUserId();
 
@@ -71,6 +72,12 @@ namespace inz.Controllers
             {
                 ViewBag.ShowList = true;
                 result = applicationDbContext;
+            }
+            else if (!string.IsNullOrEmpty(favorite))
+            {
+                ViewBag.ShowFavorite = true;
+
+                result = applicationDbContext.Where(s => s.Favorite.Id_User == userId);
             }
             else
             {
@@ -89,6 +96,13 @@ namespace inz.Controllers
                     {
                         ViewBag.ShowList = true;
                     }
+                }
+                else if(dateFrom.ToString() != null)
+                {
+                    ViewBag.ShowList = true;
+
+                    result = applicationDbContext
+                        .Where(i => i.ReleaseSong > dateFrom && dateTo > i.ReleaseSong);
                 }
             }
 
@@ -142,6 +156,8 @@ namespace inz.Controllers
         public async Task<IActionResult> CreateVM(CreateViewModel createViewModel)
         {
             var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+            var userId = User.Identity.GetUserId();
 
             if (ModelState.IsValid)
             {
@@ -199,6 +215,8 @@ namespace inz.Controllers
                                 IFormFile file = createViewModel.Name_mp3;
                                 BlobsController blobsController = new BlobsController();
                                 blobsController.UploadBlob(fileName, file, "mp3");
+
+                                song.ID_User = userId;
                             }
                             else
                             {
@@ -247,6 +265,13 @@ namespace inz.Controllers
                     song.UrlAzure = fileName;
 
                     _context.Song.Add(song);
+                    _context.SaveChanges();
+
+                    Changelog changelog = new Changelog();
+                    changelog.Changelog_Event = "create song";
+                    changelog.ID_User = userId;
+                    changelog.newValue = createViewModel.Title;
+                    _context.Changelog.Add(changelog);
                     _context.SaveChanges();
 
                     return RedirectToAction("Index", new { all = "all" });
@@ -315,7 +340,11 @@ namespace inz.Controllers
         {
             if (ModelState.IsValid)
             {
-                Song song = _context.Song.FirstOrDefault(s => s.ID_Song == id);
+                var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+                var userId = User.Identity.GetUserId();
+
+                Song song = _context.Song.Include(s => s.Artist).Include(s => s.Album).Include(s => s.Producer).FirstOrDefault(s => s.ID_Song == id);
 
                 Artist artist = new Artist();
                 var resultArtist = _context.Artist
@@ -325,6 +354,20 @@ namespace inz.Controllers
                 {
                     artist.Name_Artist = createViewModel.Name_Artist;
                     _context.Artist.Add(artist);
+                    _context.SaveChanges();
+                }
+
+                if(createViewModel.Name_Artist != song.Artist.Name_Artist)
+                {
+                    Changelog changelog = new Changelog();
+
+                    changelog.Changelog_Event = "Change artist";
+                    changelog.newValue = createViewModel.Name_Artist;
+                    changelog.oldValue = song.Artist.Name_Artist;
+                    changelog.ID_User = userId;
+                    changelog.ID_Song = song.ID_Song;
+
+                    _context.Changelog.Add(changelog);
                     _context.SaveChanges();
                 }
 
@@ -339,6 +382,20 @@ namespace inz.Controllers
                     _context.SaveChanges();
                 }
 
+                if (createViewModel.Name_Album != song.Album.Name_Album)
+                {
+                    Changelog changelog = new Changelog();
+
+                    changelog.Changelog_Event = "Change album";
+                    changelog.newValue = createViewModel.Name_Album;
+                    changelog.oldValue = song.Album.Name_Album;
+                    changelog.ID_User = userId;
+                    changelog.ID_Song = song.ID_Song;
+
+                    _context.Changelog.Add(changelog);
+                    _context.SaveChanges();
+                }
+
                 Producer producer = new Producer();
                 var resultProducer = _context.Producer
                     .Where(i => i.Name_Producer == createViewModel.Name_Producer)
@@ -350,17 +407,71 @@ namespace inz.Controllers
                     _context.SaveChanges();
                 }
 
+                if (createViewModel.Name_Producer != song.Producer.Name_Producer)
+                {
+                    Changelog changelog = new Changelog();
+
+                    changelog.Changelog_Event = "Change producer";
+                    changelog.newValue = createViewModel.Name_Producer;
+                    changelog.oldValue = song.Producer.Name_Producer;
+                    changelog.ID_User = userId;
+                    changelog.ID_Song = song.ID_Song;
+
+                    _context.Changelog.Add(changelog);
+                    _context.SaveChanges();
+                }
+
                 string fileName = null;
 
                 if (createViewModel.Name_mp3 != null)
                 {
                     fileName = createViewModel.Name_mp3.FileName;
-                    IFormFile file = createViewModel.Name_mp3;
-                    BlobsController blobsController = new BlobsController();
-                    blobsController.UploadBlob(fileName, file, "mp3");
+                    var resultFileName = _context.Song
+                        .Where(i => i.UrlAzure == fileName)
+                        .Count();
+                    if (resultFileName < 1)
+                    {
+                        if (fileName.EndsWith(".mp3"))
+                        {
+                            IFormFile file = createViewModel.Name_mp3;
+                            BlobsController blobsController = new BlobsController();
+                            blobsController.UploadBlob(fileName, file, "mp3");
 
-                    song.UrlAzure = fileName;
+                            song.ID_User = userId;
+                        }
+                        else
+                        {
+                            ViewData["Extension"] = "Podany plik nie jest w formacie MP3!";
+                            if (isAjax)
+                                return PartialView("Create");
+                            else
+                                return View("Create");
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Extension"] = "Podany plik istnieje w bazie!";
+                        if (isAjax)
+                            return PartialView("Create");
+                        else
+                            return View("Create");
+                    }
                 }
+
+                if(createViewModel.Title != song.Title)
+                {
+                    Changelog changelog = new Changelog();
+
+                    changelog.Changelog_Event = "Change title";
+                    changelog.oldValue = song.Title;
+                    changelog.newValue = createViewModel.Title;
+                    changelog.ID_User = userId;
+                    changelog.ID_Song = song.ID_Song;
+
+                    _context.Changelog.Add(changelog);
+                    _context.SaveChanges();
+                }
+
 
                 song.Title = createViewModel.Title;
 
@@ -379,14 +490,47 @@ namespace inz.Controllers
                     .Select(c => c.ID_Producer)
                     .FirstOrDefault();
 
+                if(createViewModel.ReleaseSong != song.ReleaseSong)
+                {
+                    Changelog changelog = new Changelog();
+
+                    changelog.Changelog_Event = "Change release date";
+                    changelog.newValue = createViewModel.ReleaseSong.ToString();
+                    changelog.oldValue = song.ReleaseSong.ToString();
+                    changelog.ID_User = userId;
+                    changelog.ID_Song = song.ID_Song;
+
+                    _context.Changelog.Add(changelog);
+                    _context.SaveChanges();
+                }
+
                 song.ReleaseSong = createViewModel.ReleaseSong;
 
                 var url = createViewModel.VideoUrl;
                 if (createViewModel.VideoUrl != null)
                 {
-                    url = createViewModel.VideoUrl.Replace("watch?v=", "embed/");
+                    string YoutubeLinkRegex = "(?:.+?)?(?:\\/v\\/|watch\\/|\\?v=|\\&v=|youtu\\.be\\/|\\/v=|^youtu\\.be\\/)([a-zA-Z0-9_-]{11})+";
+                    Match match = Regex.Match(createViewModel.VideoUrl, YoutubeLinkRegex);
+                    if (match.Success)
+                    {
+                        url = createViewModel.VideoUrl.Replace("watch?v=", "embed/");
+                        song.VideoUrl = url;
+                    }
                 }
-                song.VideoUrl = url;
+
+                if (createViewModel.TextSong != song.TextSong)
+                {
+                    Changelog changelog = new Changelog();
+
+                    changelog.Changelog_Event = "Change text";
+                    changelog.newValue = createViewModel.TextSong;
+                    changelog.oldValue = song.TextSong;
+                    changelog.ID_User = userId;
+                    changelog.ID_Song = song.ID_Song;
+
+                    _context.Changelog.Add(changelog);
+                    _context.SaveChanges();
+                }
 
                 song.TextSong = createViewModel.TextSong;
 
@@ -398,7 +542,7 @@ namespace inz.Controllers
             return View(createViewModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Wydawca")]
         // GET: Songs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -411,17 +555,30 @@ namespace inz.Controllers
                 .Include(s => s.Album)
                 .Include(s => s.Artist)
                 .Include(s => s.Producer)
+                .Include(s => s.Favorite)
                 .SingleOrDefaultAsync(m => m.ID_Song == id);
             if (song == null)
             {
                 return NotFound();
             }
 
+            var userId = User.Identity.GetUserId();
+
             var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
-            if (isAjax)
-                return PartialView(song);
+            if (song.ID_User == userId || User.IsInRole("Admin"))
+            {
+                if (isAjax)
+                    return PartialView(song);
+                else
+                    return View(song);
+            }
             else
-                return View(song);
+            {
+                if (isAjax)
+                    return PartialView("Views/Account/AccessDenied.cshtml");
+                else
+                    return View("Views/Account/AccessDenied.cshtml");
+            }
         }
 
         // POST: Songs/Delete/5
@@ -433,6 +590,13 @@ namespace inz.Controllers
             {
                 var opinion = _context.Opinion.Where(x => x.ID_Song == id).FirstOrDefault();
                 _context.Opinion.Remove(opinion);
+                _context.SaveChanges();
+            }
+
+            while (_context.Favorite.Where(x => x.ID_Song == id).Count() != 0)
+            {
+                var favorite = _context.Favorite.Where(x => x.ID_Song == id).FirstOrDefault();
+                _context.Favorite.Remove(favorite);
                 _context.SaveChanges();
             }
 
@@ -560,7 +724,7 @@ namespace inz.Controllers
         {
             var userId = User.Identity.GetUserId();
 
-            var result = _context.Opinion.Where(o => o.Id == userId && o.ID_Song == idSong).Count();
+            var result = _context.Opinion.Where(o => o.Id_User == userId && o.ID_Song == idSong).Count();
 
             if (result <= 0)
             {
@@ -569,7 +733,7 @@ namespace inz.Controllers
 
                 Opinion opinion = new Opinion();
                 opinion.ID_Song = idSong;
-                opinion.Id = userId;
+                opinion.Id_User = userId;
                 if (direction == true)
                 {
                     int like = _context.Song.Where(l => l.ID_Song == idSong).Select(l => l.Like).First();
@@ -593,7 +757,7 @@ namespace inz.Controllers
             else
             {
                 string chcked;
-                bool check = _context.Opinion.Where(o => o.Id == userId && o.ID_Song == idSong).Select(o => o.Direction).First();
+                bool check = _context.Opinion.Where(o => o.Id_User == userId && o.ID_Song == idSong).Select(o => o.Direction).First();
                 if (check == true)
                 {
                     chcked = "lubisz ten utwór";
@@ -707,6 +871,38 @@ namespace inz.Controllers
                 return RedirectToAction("Index", new { all = "all" });
             }
             return View(albumViewModel);
+        }
+
+        public async Task<IActionResult> Favorite(int id, bool inFavorite)
+        {
+            var userId = User.Identity.GetUserId();
+
+            if (!inFavorite)
+            {
+                if (_context.Favorite.Where(s => s.ID_Song == id && s.Id_User == userId).Count() < 1)
+                {
+                    Favorite favorite = new Favorite();
+                    favorite.ID_Song = id;
+                    favorite.Id_User = userId;
+
+                    _context.Favorite.Add(favorite);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    TempData["checked"] = "Podany utwór znajduje się w ulubionych";
+                }
+                return RedirectToAction("Index", new { all = "all" });
+            }
+            else
+            {
+                Favorite favorite = _context.Favorite.Where(s => s.ID_Song == id && s.Id_User == userId).First();
+
+                _context.Favorite.Remove(favorite);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index", new { favorite = "favorite" });
+            }      
         }
     }
 }
