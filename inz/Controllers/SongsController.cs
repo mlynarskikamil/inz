@@ -217,6 +217,7 @@ namespace inz.Controllers
                                 blobsController.UploadBlob(fileName, file, "mp3");
 
                                 song.ID_User = userId;
+                                song.UrlAzure = fileName;
                             }
                             else
                             {
@@ -438,6 +439,7 @@ namespace inz.Controllers
                             blobsController.UploadBlob(fileName, file, "mp3");
 
                             song.ID_User = userId;
+                            song.UrlAzure = fileName;
                         }
                         else
                         {

@@ -108,7 +108,7 @@ function change(song, title, artist, imgAlbum) {
         imgCoverAlbum.src = "https://pracainzynierska.blob.core.windows.net/imgalbum/" + imgAlbum;
     }
     else {
-        imgCoverAlbum.src = "https://www.tunefind.com/i/album-art-empty.png";
+        imgCoverAlbum.src = "https://pracainzynierska.blob.core.windows.net/imgalbum/empty.png";
     }
 
     mediaPlayer.src = song;
